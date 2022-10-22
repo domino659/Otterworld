@@ -16,13 +16,3 @@ class IndexController extends AbstractController
         return $this->render('index/index.html.twig');
     }
 }
-// {
-//     /**
-//      * @Route("/")
-//      * @return Response
-//      */
-//     public function index()
-//     {
-//         return new Response('Hello World!');
-//     }
-// }
