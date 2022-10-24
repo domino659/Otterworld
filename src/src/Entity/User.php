@@ -23,10 +23,10 @@ class User
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?bool $is_admin = null;
+    private ?bool $is_admin = false;
 
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $vote_score = [];
+    #[ORM\Column]
+    private ?int $vote_score = 0;
 
     #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
@@ -80,13 +80,19 @@ class User
 
         return $this;
     }
-
-    public function getVoteScore(): array
+    
+    public function getVoteScore(): int
     {
         return $this->vote_score;
     }
 
-    public function setVoteScore(array $vote_score): self
+    public function getVoteScoreString(): string
+    {
+      $prefix = $this->getVoteScore() >= 0 ? '+' : '-';
+      return sprintf('%s %d',$prefix, abs($this->getVoteScore()));
+    }
+
+    public function setVoteScore(int $vote_score): self
     {
         $this->vote_score = $vote_score;
 
