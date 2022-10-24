@@ -26,7 +26,7 @@ class User
     private ?bool $is_admin = false;
 
     #[ORM\Column]
-    private ?int $vote_score = 0;
+    private ?int $vote = 0;
 
     #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
@@ -81,20 +81,14 @@ class User
         return $this;
     }
     
-    public function getVoteScore(): int
+    public function getVote(): int
     {
-        return $this->vote_score;
+        return $this->vote;
     }
 
-    public function getVoteScoreString(): string
+    public function setVote(int $vote): self
     {
-      $prefix = $this->getVoteScore() >= 0 ? '+' : '-';
-      return sprintf('%s %d',$prefix, abs($this->getVoteScore()));
-    }
-
-    public function setVoteScore(int $vote_score): self
-    {
-        $this->vote_score = $vote_score;
+        $this->vote = $vote;
 
         return $this;
     }
@@ -153,6 +147,26 @@ class User
             $question->removeIdUser($this);
         }
 
+        return $this;
+    }
+
+    // Extra
+    public function getVoteString(): string
+    {
+      $prefix = $this->getVote() >= 0 ? '+' : '-';
+      return sprintf('%s %d',$prefix, abs($this->getVote()));
+    }
+
+    public function upVote(): self
+    {
+        $this->vote++;
+        return $this;
+    }
+
+    public function downVote(): self
+    {
+        $this->vote--;
+        // dd(vote)
         return $this;
     }
 }
