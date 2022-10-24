@@ -28,7 +28,7 @@ class User
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?bool $isAdmin = null;
+    private ?bool $isAdmin = false;
 
     #[ORM\Column]
     private ?int $votes = 0;

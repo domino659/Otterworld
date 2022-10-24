@@ -47,7 +47,10 @@ class UserController extends AbstractController
     $user = new User();
     $user->setUsername($request->request->get('username'))
       ->setEmail($request->request->get('email'))
-      ->setPassword($request->request->get('password'));
+      ->setPassword($request->request->get('password'))
+      ->setIsAdmin(false)
+      ->setCreatedAt(new \DateTime())
+      ->setUpdatedAt(new \DateTime());
 
     $em->persist($user);
     $em->flush();
