@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ parent() }}
+  user_show
+{% endblock %}
+
+{% block body %}
+  {{ parent() }}
+  {% for user in users %}
+    <P class'display-5'>ID: {{ user.id }}</P>
+    <P class'display-5'>Pseudo: {{ user.pseudo }}</P>
+    <P class'display-5'>{{ user.email }}</P>
+    <P class'display-5'>{{ user.IsAdmin ?'Yes':'No'}}</P>
+    <a href="{{ path('app_user_show', { email: user.email }) }}">
+        More details go only on first user annoying
+    </a>
+    <br>
+  {% endfor %}
+{% endblock %}

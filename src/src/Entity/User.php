@@ -18,7 +18,10 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $pseudo = null;
-
+    
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+    
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
@@ -53,6 +56,18 @@ class User
     public function setPseudo(string $pseudo): self
     {
         $this->pseudo = $pseudo;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  {{ parent() }}
+  user_show
+{% endblock %}
+
+{% block body %}
+  {{ parent() }}
+  <form class="w-75 mx-auto mt-5" action="{{ path('app_user_create') }}"  method="post">
+    <h1 class="text-center">Create user</h1>
+    <div class="mb-3">
+      <label for="pseudo" class="form-label">Pseudo</label>
+      <input type="text" class="form-control" id="pseudo" name="pseudo" value="" placeholder="Pseudo"
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="text" class="form-control" id="email" name="email" value="" placeholder="default@gmail.com"
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="text" class="form-control" id="password" name="password" value="" placeholder="Password"
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+{% endblock %}

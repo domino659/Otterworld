@@ -30,7 +30,7 @@ class Post
     private ?string $content = null;
 
     #[ORM\Column]
-    private ?float $price = null;
+    private ?float $price = 0;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $publication_date = null;
