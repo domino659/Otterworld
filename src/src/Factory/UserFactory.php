@@ -44,7 +44,7 @@ final class UserFactory extends ModelFactory
             'email' => self::faker()->email(),
             'password' => self::faker()->password(),
             'isAdmin' => self::faker()->boolean(),
-            'votes' => self::faker()->randomNumber(),
+            'votes' => self::faker()->numberBetween(-20, 50),
             'createdAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
             'updatedAt' => self::faker()->dateTimeBetween('-50 days', '-1 second')
         ];
