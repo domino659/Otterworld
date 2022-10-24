@@ -40,9 +40,9 @@ final class UserFactory extends ModelFactory
     {
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'username' => self::faker()->text(),
-            'email' => self::faker()->text(),
-            'password' => self::faker()->text(),
+            'username' => self::faker()->userName(),
+            'email' => self::faker()->email(),
+            'password' => self::faker()->password(),
             'isAdmin' => self::faker()->boolean(),
             'votes' => self::faker()->randomNumber(),
             'createdAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),

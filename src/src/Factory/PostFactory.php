@@ -40,8 +40,8 @@ final class PostFactory extends ModelFactory
     {
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'title' => self::faker()->text(),
-            'slugs' => self::faker()->text(100),
+            'title' => self::faker()->userName(),
+            'slugs' => self::faker()->slug(),
             'content' => self::faker()->text(),
             'price' => self::faker()->randomFloat(),
             'createdAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
