@@ -9,7 +9,7 @@
   {{ parent() }}
   {% for user in users %}
     <P class'display-5'>ID: {{ user.id }}</P>
-    <P class'display-5'>Pseudo: {{ user.pseudo }}</P>
+    <P class'display-5'>Username: {{ user.username }}</P>
     <P class'display-5'>{{ user.email }}</P>
     <P class'display-5'>{{ user.IsAdmin ?'Yes':'No'}}</P>
     <a href="{{ path('app_user_show', { email: user.email }) }}">

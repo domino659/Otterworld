@@ -44,10 +44,10 @@ class QuestionRepository extends ServiceEntityRepository
 //     */
 //    public function findByExampleField($value): array
 //    {
-//        return $this->createQueryBuilder('q')
-//            ->andWhere('q.exampleField = :val')
+//        return $this->createQueryBuilder('n')
+//            ->andWhere('n.exampleField = :val')
 //            ->setParameter('val', $value)
-//            ->orderBy('q.id', 'ASC')
+//            ->orderBy('n.id', 'ASC')
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
@@ -56,8 +56,8 @@ class QuestionRepository extends ServiceEntityRepository
 
 //    public function findOneBySomeField($value): ?Question
 //    {
-//        return $this->createQueryBuilder('q')
-//            ->andWhere('q.exampleField = :val')
+//        return $this->createQueryBuilder('n')
+//            ->andWhere('n.exampleField = :val')
 //            ->setParameter('val', $value)
 //            ->getQuery()
 //            ->getOneOrNullResult()

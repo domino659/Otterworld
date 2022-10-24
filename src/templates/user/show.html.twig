@@ -8,19 +8,19 @@
 {% block body %}
   {{ parent() }}
   <h4 class'display-5'>ID:{{ user.id }}</h4>
-  <h4 class'display-5'>Pseudo:{{ user.pseudo }}</h4>
+  <h4 class'display-5'>Username:{{ user.username }}</h4>
   <h4 class'display-5'>{{ user.IsAdmin ?'Yes':'No'}}</h4>
   <div class="col">
-    <form action="{{ path('app_user_vote', { id: user.id }) }}" method="post">
-      <button class="badge bg-success" name="vote" value="up">Vote up</button>
-      <button class="badge bg-danger" name="vote" value="down">Vote down</button>
-      <span class="badge bg-secondary mx-3 js-vote-total">{{ user.getVote }}</span>
+    <form action="{{ path('app_user_votes', { id: user.id }) }}" method="post">
+      <button class="badge bg-success" name="votes" value="up">Vote up</button>
+      <button class="badge bg-danger" name="votes" value="down">Vote down</button>
+      <span class="badge bg-secondary mx-3 js-vote-total">{{ user.getVotes }}</span>
     </form>
   </div>
   
   <div class="p-5 mb-4 bg-light rounded-3">
     <div class="container-fluid py-5">
-      <h1 class="display-4">{{ user.pseudo }}</h1>
+      <h1 class="display-4">{{ user.username }}</h1>
       <p class="col-md-8 fs-4">{{ user.email }}</p>
       <a href="{{ path('app_user_modify', { email: user.email }) }}">
         <button type="button" class="btn btn-primary">Update User</button>

@@ -5,42 +5,40 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
 {
+    use TimestampableEntity;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $pseudo = null;
-    
+    private ?string $username = null;
+
     #[ORM\Column(length: 255)]
     private ?string $email = null;
-    
+
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?bool $is_admin = false;
+    private ?bool $isAdmin = null;
 
     #[ORM\Column]
-    private ?int $vote = 0;
+    private ?int $votes = 0;
 
-    #[ORM\OneToMany(mappedBy: 'id_user', targetEntity: Post::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
     private Collection $posts;
-
-    #[ORM\ManyToMany(targetEntity: Question::class, mappedBy: 'id_user')]
-    private Collection $questions;
 
     public function __construct()
     {
         $this->posts = new ArrayCollection();
-        $this->questions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -48,14 +46,14 @@ class User
         return $this->id;
     }
 
-    public function getPseudo(): ?string
+    public function getUsername(): ?string
     {
-        return $this->pseudo;
+        return $this->username;
     }
 
-    public function setPseudo(string $pseudo): self
+    public function setUsername(string $username): self
     {
-        $this->pseudo = $pseudo;
+        $this->username = $username;
 
         return $this;
     }
@@ -86,32 +84,33 @@ class User
 
     public function isIsAdmin(): ?bool
     {
-        return $this->is_admin;
+        return $this->isAdmin;
     }
 
-    public function setIsAdmin(bool $is_admin): self
+    public function setIsAdmin(bool $isAdmin): self
     {
-        $this->is_admin = $is_admin;
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+    public function getVotes(): ?int
+    {
+        return $this->votes;
+    }
+
+    public function setVotes(int $votes): self
+    {
+        $this->votes = $votes;
 
         return $this;
     }
     
-    public function getVote(): int
-    {
-        return $this->vote;
-    }
-
-    public function setVote(int $vote): self
-    {
-        $this->vote = $vote;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Post>
      */
     public function getPosts(): Collection
+
     {
         return $this->posts;
     }
@@ -120,7 +119,7 @@ class User
     {
         if (!$this->posts->contains($post)) {
             $this->posts->add($post);
-            $post->setIdUser($this);
+            $post->setUser($this);
         }
 
         return $this;
@@ -130,58 +129,30 @@ class User
     {
         if ($this->posts->removeElement($post)) {
             // set the owning side to null (unless already changed)
-            if ($post->getIdUser() === $this) {
-                $post->setIdUser(null);
+            if ($post->getUser() === $this) {
+                $post->setUser(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Question>
-     */
-    public function getQuestions(): Collection
-    {
-        return $this->questions;
-    }
-
-    public function addQuestion(Question $question): self
-    {
-        if (!$this->questions->contains($question)) {
-            $this->questions->add($question);
-            $question->addIdUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuestion(Question $question): self
-    {
-        if ($this->questions->removeElement($question)) {
-            $question->removeIdUser($this);
-        }
-
-        return $this;
-    }
-
     // Extra
-    public function getVoteString(): string
+    public function getVotesString(): string
     {
-      $prefix = $this->getVote() >= 0 ? '+' : '-';
-      return sprintf('%s %d',$prefix, abs($this->getVote()));
+        $prefix = $this->getVotes() >= 0 ? '+' : '-';
+        return sprintf('%s %d',$prefix, abs($this->getVotes()));
     }
 
-    public function upVote(): self
+    public function upVotes(): self
     {
-        $this->vote++;
+        $this->votes++;
         return $this;
     }
 
-    public function downVote(): self
+    public function downVotes(): self
     {
-        $this->vote--;
-        // dd(vote)
+        $this->votes--;
         return $this;
     }
 }

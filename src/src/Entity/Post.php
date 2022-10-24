@@ -7,24 +7,23 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
 {
+    use TimestampableEntity;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?user $id_user = null;
-
     #[ORM\Column(length: 255)]
     private ?string $title = null;
-
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $tags = [];
+    
+    #[ORM\Column(length: 100)]
+    private ?string $slugs = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
@@ -32,13 +31,10 @@ class Post
     #[ORM\Column]
     private ?float $price = 0;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $publication_date = null;
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    private ?user $user = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private array $photo = [];
-
-    #[ORM\OneToMany(mappedBy: 'id_post', targetEntity: Question::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Question::class)]
     private Collection $questions;
 
     public function __construct()
@@ -49,18 +45,6 @@ class Post
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdUser(): ?user
-    {
-        return $this->id_user;
-    }
-
-    public function setIdUser(?user $id_user): self
-    {
-        $this->id_user = $id_user;
-
-        return $this;
     }
 
     public function getTitle(): ?string
@@ -75,14 +59,14 @@ class Post
         return $this;
     }
 
-    public function getTags(): array
+    public function getSlugs(): ?string
     {
-        return $this->tags;
+        return $this->slugs;
     }
 
-    public function setTags(array $tags): self
+    public function setSlugs(string $slugs): self
     {
-        $this->tags = $tags;
+        $this->slugs = $slugs;
 
         return $this;
     }
@@ -111,26 +95,14 @@ class Post
         return $this;
     }
 
-    public function getPublicationDate(): ?\DateTimeInterface
+    public function getUser(): ?user
     {
-        return $this->publication_date;
+        return $this->user;
     }
 
-    public function setPublicationDate(\DateTimeInterface $publication_date): self
+    public function setUser(?user $user): self
     {
-        $this->publication_date = $publication_date;
-
-        return $this;
-    }
-
-    public function getPhoto(): array
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(?array $photo): self
-    {
-        $this->photo = $photo;
+        $this->user = $user;
 
         return $this;
     }
@@ -147,7 +119,7 @@ class Post
     {
         if (!$this->questions->contains($question)) {
             $this->questions->add($question);
-            $question->setIdPost($this);
+            $question->setPost($this);
         }
 
         return $this;
@@ -157,8 +129,8 @@ class Post
     {
         if ($this->questions->removeElement($question)) {
             // set the owning side to null (unless already changed)
-            if ($question->getIdPost() === $this) {
-                $question->setIdPost(null);
+            if ($question->getPost() === $this) {
+                $question->setPost(null);
             }
         }
 

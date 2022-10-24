@@ -45,7 +45,7 @@ class UserController extends AbstractController
   public function create(EntityManagerInterface $em, Request $request): Response
   {
     $user = new User();
-    $user->setPseudo($request->request->get('pseudo'))
+    $user->setUsername($request->request->get('username'))
       ->setEmail($request->request->get('email'))
       ->setPassword($request->request->get('password'));
 
@@ -76,11 +76,11 @@ class UserController extends AbstractController
    */
   public function update(User $user, EntityManagerInterface $em, Request $request): Response
   {
-    $user->setPseudo($request->request->get('pseudo'))
+    $user->setUsername($request->request->get('username'))
       ->setEmail($request->request->get('email'))
       ->setPassword($request->request->get('password'));
-      // ->setIsAdmin($request->request->get('is_admin'))
-      // ->setVote($request->request->get('vote'));
+      // ->setIsAdmin($request->request->get('isAdmin'))
+      // ->setVotes($request->request->get('votes'));
 
     $em->flush();
 
@@ -113,24 +113,20 @@ class UserController extends AbstractController
     ]);
   }
 
-  /** @Route("/users/{id}/vote", name="app_user_vote", methods="POST")
+  /** @Route("/users/{id}/votes", name="app_user_votes", methods="POST")
    * @return Response
    */
-  public function userVote(User $user, Request $request, EntityManagerInterface $em): Response
+  public function userVotes(User $user, Request $request, EntityManagerInterface $em): Response
   {
-    $vote = $request->request->get('vote');
-    // dd($vote);
-    if ($vote === 'up') {
-      // dd($user);
-      $user->upVote();
+    $votes = $request->request->get('votes');
+    if ($votes === 'up') {
+      $user->upVotes();
     }
-    elseif ($vote === 'down') {
-      // dd($user);
-      $user->downVote();
+    elseif ($votes === 'down') {
+      $user->downVotes();
     }
 
     $em->flush();
-    // dd($user);
     return $this->redirectToRoute('app_user_show' , ['email' => $user->getEmail()]);
   }
 }
