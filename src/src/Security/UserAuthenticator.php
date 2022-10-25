@@ -8,6 +8,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 
 class UserAuthenticator extends AbstractAuthenticator
 {
@@ -19,17 +22,27 @@ class UserAuthenticator extends AbstractAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        dd('authenticate');
+        $email = $request->request->get('email');
+        $password = $request->request->get('password');
+        $csrf = $request->request->get('csrf');
+        
+        return new Passport(
+            new UserBadge($email),
+            new PasswordCredentials($password),
+            [
+                new CsrfTokenBadge('login_form', $csrf),
+            ]
+        );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        // TODO: Implement onAuthenticationSuccess() method.
+    {   
+        dd("Success");
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        // TODO: Implement onAuthenticationFailure() method.
+        dd("Invalid credentials, $exception");
     }
 
 //    public function start(Request $request, AuthenticationException $authException = null): Response

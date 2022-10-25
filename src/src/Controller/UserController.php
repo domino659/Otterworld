@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -42,12 +43,12 @@ class UserController extends AbstractController
    * @return Response
    * @Route("/user/create", name="app_user_create", methods="POST")
    */
-  public function create(EntityManagerInterface $em, Request $request): Response
+  public function create(EntityManagerInterface $em, Request $request, UserPasswordHasherInterface $hasher): Response
   {
     $user = new User();
     $user->setUsername($request->request->get('username'))
       ->setEmail($request->request->get('email'))
-      ->setPassword($request->request->get('password'))
+      ->setPassword($hasher->hashPassword($user, 'password'))
       ->setIsAdmin(false)
       ->setCreatedAt(new \DateTime())
       ->setUpdatedAt(new \DateTime());

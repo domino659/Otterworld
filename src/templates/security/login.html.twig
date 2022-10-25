@@ -5,8 +5,22 @@
 {% endblock %}
 
 {% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+
   <div class="default-container">
     <form method="post">
-      <input class="form-control" type="text" name="email" placeholder="Email...">
+      <div class="mb-3">
+        <input class="form-control" type="email" name="email" placeholder="username@gmail.com">
+      </div>
+      <div class="mb-3">
+        <input class="form-control" type="password" name="password" placeholder="Password"
+      </div>
+
+      <input type="hidden" name="csrf" value="{{ csrf_token('login_form') }}">
+
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
   </div>
 {% endblock %}
