@@ -32,7 +32,7 @@ class Post
     private ?float $price = 0;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
-    private ?user $user = null;
+    private ?User $user = null;
 
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Question::class)]
     private Collection $questions;
@@ -95,12 +95,12 @@ class Post
         return $this;
     }
 
-    public function getUser(): ?user
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?user $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 

@@ -24,7 +24,7 @@ class Question
     private ?string $content = null;
 
     #[ORM\ManyToOne(inversedBy: 'questions')]
-    private ?post $post = null;
+    private ?Post $post = null;
 
     public function getId(): ?int
     {
@@ -55,12 +55,12 @@ class Question
         return $this;
     }
 
-    public function getPost(): ?post
+    public function getPost(): ?Post
     {
         return $this->post;
     }
 
-    public function setPost(?post $post): self
+    public function setPost(?Post $post): self
     {
         $this->post = $post;
 

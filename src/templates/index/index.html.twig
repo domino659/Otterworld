@@ -1,10 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-  {{ parent() }}
   Index
 {% endblock %}
 
+
 {% block body %}
-  <h1>Hello World!</h1>
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+  <div>
+    {{ include('components/hero-header.html.twig') }}
+  </div>
+  <div class="default-container">
+    <br>
+    <h1>Hello World!</h1>
+    <img src="{{ asset('images/otter_slide.webp') }}">
+  </div>
 {% endblock %}
