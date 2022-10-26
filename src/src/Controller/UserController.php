@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -116,16 +117,19 @@ class UserController extends AbstractController
     $em->remove($user);
     $em->flush();
     
-    return $this->redirectToRoute('app_user_index');
+    return $this->redirectToRoute('index');
   }
 
   /**
    * @param User $user
    * @return Response
-   * @Route("/user/{email}", name="app_user_show")
+   * @Route("/user/{email}", name="app_user_show")*
+   * @IsGranted("USER_VIEW", subject="user")
    */
   public function show(User $user) : Response
   {
+    // $this->denyAccessUnlessGranted('USER_VIEW', $user);
+
     return $this->render('user/show.html.twig', [
       'user' => $user,
     ]);

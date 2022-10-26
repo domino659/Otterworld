@@ -15,9 +15,10 @@
       <p>{{ user.username }}</p>
       <p>{{ user.email }}</p>
       <p>{{ user.IsAdmin ?'Yes':'No'}}</p>
-      <a href="{{ path('app_user_show', { email: user.email }) }}">
-          More details
-      </a>
+      {# TODO ADD or if user is admin #}
+      {% if is_granted("USER_VIEW", user) %}
+        <a href="{{ path('app_user_show', { email: user.email }) }}">More details</a>
+      {% endif %}
       <br>
       <br>
     {% endfor %}
