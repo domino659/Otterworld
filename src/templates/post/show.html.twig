@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  post_show
+{% endblock %}
+
+{% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+  
+  <div class="default-container">
+    <h4>{{ post.id }}</h4>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.slugs }}</p>
+    <p>{{ post.content }}</p>
+    <p>{{ post.price }}</p>
+    <p>{{ post.createdAt|ago }}</p>
+
+
+    <div>
+      <h2>Il y a {{ post.questions|length }} question(s):</h2>
+      <ul>
+        {% for question in post.questions %}
+          <p>{{ question.id }}</p>
+          <p>{{ question.title }}</p>
+          <p>{{ question.content }}</p>
+          <p>{{ question.createdAt|ago }}</p>
+        {% endfor %}
+    </div>  
+  </div>
+  
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  user_index
+{% endblock %}
+
+{% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+
+  <div class="default-container">
+    {% for user in users %}
+      <p>{{ user.id }}</p>
+      <p>{{ user.username }}</p>
+      <p>{{ user.email }}</p>
+      <p>{{ user.IsAdmin ?'Yes':'No'}}</p>
+      <a href="{{ path('app_user_show', { email: user.email }) }}">
+          More details
+      </a>
+      <br>
+      <br>
+    {% endfor %}
+  </div>
+{% endblock %}
