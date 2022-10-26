@@ -6,12 +6,13 @@
 <div>
   <div class="navbar">
     <ul>
-      <li><a class="active" href="{{ path('index') }}">Home</a></li>
+      <li><a class="active" href="{{ path('app_index') }}">Home</a></li>
       <li><a href="{{ path('app_user_index') }}">Users</a></li>
       <li><a href="{{ path('app_post_index') }}">Posts</a></li>
       <li><a href="{{ path('app_question_index') }}">Questions</a></li>
       
       <div>
+        <li><a href="{{ path('api_index') }}">Api</a></li>
         <li><a href="{{ path('app_logout') }}">Logout</a></li>
         <li><a href="{{ path('app_login') }}">Login</a></li>
         <li><a href="{{ path('app_user_new') }}">Sign-in</a></li>

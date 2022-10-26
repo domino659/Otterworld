@@ -11,6 +11,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserAuthenticator extends AbstractAuthenticator
 {
@@ -37,6 +38,7 @@ class UserAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {   
+        return new RedirectResponse('/');
         dd("Success");
     }
 
