@@ -69,36 +69,40 @@ class UserController extends AbstractController
     return $this->render('user/new.html.twig');  
   }
   
-  /**
-   * @param User $user
-   * @return Response
-   * @Route("/user/{email}/modify", name="app_user_modify")
-   */
-  public function modify(User $user): Response
-  {
-    return $this->render('user/modify.html.twig', [
-      'user' => $user,
-    ]);
-  }
-  
+  // TODO Add update by specific value and not update everithing
   /**
    * @param User $user
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/user/{email}/update", name="app_user_update", methods="POST")
+   * @Route("/user/{email}/update", name="app_user_update")
    */
-  public function update(User $user, EntityManagerInterface $em, Request $request): Response
+  public function update(User $user,
+                        EntityManagerInterface $em,
+                        UserPasswordHasherInterface $hasher,
+                        Request $request): Response
   {
-    $user->setUsername($request->request->get('username'))
-      ->setEmail($request->request->get('email'))
-      ->setPassword($request->request->get('password'));
-      // ->setIsAdmin($request->request->get('isAdmin'))
-      // ->setVotes($request->request->get('votes'));
+    if ($request->isMethod('POST')) {
+      if (!empty($request->request->get('username'))
+        && !empty($request->request->get('email'))
+        && !empty($request->request->get('password'))
+        && !empty($request->request->get('password_comfirm'))) {
+          if ($request->request->get('password') === $request->request->get('password_comfirm')
+            && $this->isCsrfTokenValid('update_form', $request->request->get('csrf'))) {
 
-    $em->flush();
-
-    return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
+          $user->setUsername($request->request->get('username'))
+            ->setEmail($request->request->get('email'))
+            ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
+          
+          $em->flush();
+          
+          return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
+        }
+        return $this->render('user/update.html.twig', ['error' => 'Passwords do not match']);
+      }
+      return $this->render('user/update.html.twig', ['error' => 'All fields are required']);
+    }
+    return $this->render('user/update.html.twig', ['user' => $user]);
   }
   
   /**
