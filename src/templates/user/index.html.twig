@@ -10,17 +10,17 @@
   </div>
 
   <div class="default-container">
-    {% for user in users %}
-      <p>{{ user.id }}</p>
-      <p>{{ user.username }}</p>
-      <p>{{ user.email }}</p>
-      <p>{{ user.IsAdmin ?'Yes':'No'}}</p>
-      {# TODO ADD or if user is admin #}
-      {% if is_granted("USER_VIEW", user) %}
-        <a href="{{ path('app_user_show', { email: user.email }) }}">More details</a>
-      {% endif %}
-      <br>
-      <br>
+    <h3>{{ pagination.getTotalItemCount }} Total Users</h3>
+    {% for user in pagination %}
+      <div>
+        <p>{{ user.id }}</p>
+        <p>{{ user.username }}</p>
+        <p>{{ user.email }}</p>
+        {% if is_granted("USER_VIEW", user) %}
+          <a href="{{ path('app_user_show', { email: user.email }) }}">More details</a>
+        {% endif %}
+      </div>
     {% endfor %}
+    {{ knp_pagination_render(pagination) }}
   </div>
 {% endblock %}

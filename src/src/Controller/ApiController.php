@@ -12,11 +12,11 @@ class ApiController extends AbstractController
   /**
    * @Route("/api", name="api")
    */
-  public function index(UserRepository $UserRepository): Response
+  public function index(UserRepository $userRepository): Response
   {
     // return $this->json(['message' => 'Welcome to your new controller!']);
 
-    $users = $UserRepository->findAllAskedUserByNewest();
+    $users = $userRepository->findAllAskedUserByAlphabeticalOrder();
     return $this->json($users, 200, [], ['groups' => ['main']]);
   }
 }

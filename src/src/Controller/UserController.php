@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -24,14 +25,42 @@ class UserController extends AbstractController
    * @return Response
    * @Route("/user", name="admin_user_index")
    */
-  public function index(UserRepository $userRepository): Response
-  {
-    $users = $userRepository->findAll();
+  public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
+  // {
+  //   $users = $userRepository->findAll();
 
+  //   return $this->render('user/index.html.twig', [
+  //     'users' => $users,
+  //   ]);
+  // }
+
+  {
+    $search = $request->query->get('u');
+    $users = $userRepository->findAllAskedUserByAlphabeticalOrderPaginate();
+    // dd($users);
+    $pagination = $paginator->paginate(
+      $users, /* query NOT result */
+      $request->query->getInt('page', 1), /*page number*/
+      10 /*limit per page*/
+    );
+    // dd($pagination);
     return $this->render('user/index.html.twig', [
-      'users' => $users,
+      'pagination' => $pagination
     ]);
+
   }
+
+
+
+
+
+
+
+
+
+
+
+
 
   /**
    * @param EntityManagerInterface $em
