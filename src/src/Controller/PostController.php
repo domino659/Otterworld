@@ -38,4 +38,36 @@ class PostController extends AbstractController
     ]);
   }
   
+  /**
+   * @return Response
+   * @Route("/user/sign-in", name="app_user_new")
+   */
+  public function new(): Response
+  {
+    return $this->render('post/new.html.twig');
+  }
+  
+    /**
+   * @param EntityManagerInterface $em
+   * @param Request $request
+   * @return Response
+   * @Route("/user/create", name="app_user_create", methods="POST")
+   */
+  public function create(EntityManagerInterface $em, Request $request, UserPasswordHasherInterface $hasher): Response
+  {
+    $loggedUser = $this->getUser();
+
+    $post = new User();
+    $user->setUsername($request->request->get('username'))
+      ->setEmail($request->request->get('email'))
+      ->setPassword($hasher->hashPassword($user, 'password'))
+      ->setIsAdmin(false)
+      ->setCreatedAt(new \DateTime())
+      ->setUpdatedAt(new \DateTime());
+
+    $em->persist($user);
+    $em->flush();
+
+    return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
+  }
 }
