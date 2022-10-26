@@ -12,6 +12,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 use App\Repository\UserRepository;
 
@@ -57,8 +58,6 @@ class ApiAuthenticator extends AbstractAuthenticator implements AuthenticationEn
     
     public function start(Request $request, AuthenticationException $exception = null): Response
     {
-        // dd("Invalid credentials, $exception");
         return new RedirectResponse('/login');
-        // return new JsonResponse(['message' => 'Authentication Required'], Response::HTTP_UNAUTHORIZED);
     }
 }

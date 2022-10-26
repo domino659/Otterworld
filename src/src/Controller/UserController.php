@@ -8,9 +8,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\AppAuthentificator;
 
 class UserController extends AbstractController
 {
@@ -29,35 +31,63 @@ class UserController extends AbstractController
   }
 
   /**
-   * @return Response
-   * @Route("/user/sign-in", name="app_user_new")
-   */
-  public function new(): Response
-  {
-    return $this->render('user/sign-in.html.twig');
-  }
-  
-  /**
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/user/create", name="app_user_create", methods="POST")
+   * @Route("/user/sign-in", name="app_user_new")
    */
-  public function create(EntityManagerInterface $em, Request $request, UserPasswordHasherInterface $hasher): Response
+  public function new(Request $request,
+                      EntityManagerInterface $em,
+                      UserPasswordHasherInterface $hasher,
+                      UserAuthenticatorInterface $authenticator,
+                      AppAuthentificator $appAuthenticator): Response
   {
-    $user = new User();
-    $user->setUsername($request->request->get('username'))
-      ->setEmail($request->request->get('email'))
-      ->setPassword($hasher->hashPassword($user, 'password'))
-      ->setIsAdmin(false)
-      ->setCreatedAt(new \DateTime())
-      ->setUpdatedAt(new \DateTime());
+    if ($request->isMethod('POST')) {
+      if (!empty($request->request->get('password'))
+        && !empty($request->request->get('password_comfirm'))
+        && $request->request->get('password') === $request->request->get('password_comfirm')
+        && $this->isCsrfTokenValid('register_form', $request->request->get('csrf'))) {
 
-    $em->persist($user);
-    $em->flush();
-
-    return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
+        $user = new User();
+        $user->setUsername($request->request->get('username'))
+          ->setEmail($request->request->get('email'))
+          ->setPassword($hasher->hashPassword($user, $request->request->get('password')))
+          // TODO CreatedAt UpdatedAt default value in user Entity
+          ->setCreatedAt(new \DateTime())
+          ->setUpdatedAt(new \DateTime());
+      
+        $em->persist($user);
+        $em->flush();
+          
+        return $authenticator->authenticateUser($user, $appAuthenticator, $request);
+        // return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
+        }
+        return $this->render('user/new.html.twig', ['error' => 'Passwords do not match']);
+    }
+    return $this->render('user/new.html.twig');  
   }
+  
+  // /**
+  //  * @param EntityManagerInterface $em
+  //  * @param Request $request
+  //  * @return Response
+  //  * @Route("/user/create", name="app_user_create", methods="POST")
+  //  */
+  // public function create(EntityManagerInterface $em, Request $request, UserPasswordHasherInterface $hasher): Response
+  // {
+  //   $user = new User();
+  //   $user->setUsername($request->request->get('username'))
+  //     ->setEmail($request->request->get('email'))
+  //     ->setPassword($hasher->hashPassword($user, 'password'))
+  //     ->setIsAdmin(false)
+  //     ->setCreatedAt(new \DateTime())
+  //     ->setUpdatedAt(new \DateTime());
+
+  //   $em->persist($user);
+  //   $em->flush();
+
+  //   return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
+  // }
   
   /**
    * @param User $user

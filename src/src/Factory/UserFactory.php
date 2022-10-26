@@ -8,6 +8,8 @@ use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @extends ModelFactory<User>
@@ -63,4 +65,28 @@ final class UserFactory extends ModelFactory
     {
         return User::class;
     }
+
+    // /**
+    //  * @param Request $request
+    //  * @param EntityManagerInterface $em
+    //  * @return Response
+    //  * @Route("/user/sign-in", name="app_user_new")
+    //  */
+
+    // public function new(Request $request,
+    //                     EntityManagerInterface $em,
+    //                     UserPasswordHasherInterface $hasher,
+    //                     UserAuthentificatorInterface $authentificator,
+    //                     LoginFormAuthentificator $loginFormAuthentificator): Response
+    // {
+    //     $user = new User();
+    //     $user->setUsername($request->request->get('username'))
+    //     ->setEmail($request->request->get('email'))
+    //     ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
+
+    //     $em->persist($user);
+    //     $em->flush();
+
+    //     return $authentificator->authenticateUser($user, $loginFormAuthetificator, $request);
+    // }
 }
