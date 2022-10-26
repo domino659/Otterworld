@@ -34,7 +34,8 @@ class Post
     #[ORM\ManyToOne(inversedBy: 'posts')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Question::class)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Question::class, cascade: ["all"])]
+
     private Collection $questions;
 
     public function __construct()

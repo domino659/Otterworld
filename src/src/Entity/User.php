@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $votes = 0;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class, cascade: ["all"])]
     private Collection $posts;
 
     public function __construct()
