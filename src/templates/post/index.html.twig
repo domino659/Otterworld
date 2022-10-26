@@ -12,7 +12,7 @@
   <div class="default-container">
     {% for post in posts %}
       <a href="{{ path('app_post_show', { id: post.id }) }}">{{ post.title }}</a>
-      <p>{{ post.slugs }}</p>
+      <p>{{ post.slug }}</p>
       <p>{{ post.content }}</p>
       <p>{{ post.price }}</p>
       <p>{{ post.createdAt|ago }}</p>

@@ -26,8 +26,9 @@ class Post
     private ?string $title = null;
     
     #[ORM\Column(length: 100)]
+    #[Gedmo\Slug(fields: ['title'])]
     #[Groups(['main'])]
-    private ?string $slugs = null;
+    private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['main'])]
@@ -66,14 +67,14 @@ class Post
         return $this;
     }
 
-    public function getSlugs(): ?string
+    public function getSlug(): ?string
     {
-        return $this->slugs;
+        return $this->slug;
     }
 
-    public function setSlugs(string $slugs): self
+    public function setSlug(string $slug): self
     {
-        $this->slugs = $slugs;
+        $this->slug = $slug;
 
         return $this;
     }
