@@ -19,7 +19,7 @@ class UserController extends AbstractController
   /**
    * @param UserRepository $userRepository
    * @return Response
-   * @Route("/user", name="app_user_index")
+   * @Route("/user", name="admin_user_index")
    */
   public function index(UserRepository $userRepository): Response
   {
@@ -34,7 +34,7 @@ class UserController extends AbstractController
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/user/sign-in", name="app_user_new")
+   * @Route("/user/sign-in", name="sign_in")
    */
   public function new(Request $request,
                       EntityManagerInterface $em,

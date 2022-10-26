@@ -16,7 +16,7 @@ class PostController extends AbstractController
   /**
    * @param EntytyManagerInterface $em
    * @return Response
-   * @Route("/post", name="app_post_index")
+   * @Route("/post", name="admin_post_index")
    */
   public function index(PostRepository $postRepository): Response
   {
@@ -40,7 +40,7 @@ class PostController extends AbstractController
   
   /**
    * @return Response
-   * @Route("/user/new", name="app_user_new")
+   * @Route("/user/new", name="sign_in")
    */
   public function new(): Response
   {

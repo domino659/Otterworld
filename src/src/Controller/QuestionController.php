@@ -17,7 +17,7 @@ class QuestionController extends AbstractController
   /**
    * @param EntytyManagerInterface $em
    * @return Response
-   * @Route("/question", name="app_question_index")
+   * @Route("/question", name="admin_question_index")
    */
   public function index(QuestionRepository $questionRepository): Response
   {
