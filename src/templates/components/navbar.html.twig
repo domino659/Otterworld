@@ -6,19 +6,19 @@
 <div>
   <div class="navbar">
     <ul>
-      <li><a class="active" href="{{ path('index') }}">Home</a></li>
-      <li><a href="{{ path('admin_user_index') }}">Users</a></li>
-      <li><a href="{{ path('admin_post_index') }}">Posts</a></li>
-      <li><a href="{{ path('admin_question_index') }}">Questions</a></li>
+      <li><a class="active" href="{{ path('index') }}"><h4>Home</h4></a></li>
+      <li><a href="{{ path('admin_user_index') }}"><h4>Users</h4></a></li>
+      <li><a href="{{ path('admin_post_index') }}"><h4>Posts</h4></a></li>
+      <li><a href="{{ path('admin_question_index') }}"><h4>Questions</h4></a></li>
       
       <div>
         {% if is_granted('ROLE_USER') %}
-          <li><h3>{{ app.user.username }}</h3></li>
-          <li><a href="{{ path('app_logout') }}">Logout</a></li>
-          <li><img class="avatar" src="{{ asset('images/user_profile.jpg') }}"/></li>
+          <li><a href="{{ path('app_logout') }}"><h4>Logout</h4></a></li>
+          <li><a href="{{ path('app_user_show', { email: app.user.email }) }}"><h4>{{ app.user.username }}</h4></a></li>
+          <li><a id="avatarLink" href="{{ path('app_user_show', { email: app.user.email }) }}"><img class="avatar" src="{{ asset('images/user_profile.jpg') }}"/></a></li>
         {% else %}
-          <li><a href="{{ path('login') }}">Login</a></li>
-          <li><a href="{{ path('sign_in') }}">Sign-in</a></li>
+          <li><a href="{{ path('login') }}"><h4>Login</h4></a></li>
+          <li><a href="{{ path('sign_in') }}"><h4>Sign-in</h4></a></li>
         {% endif %}
       </div>
     </ul>

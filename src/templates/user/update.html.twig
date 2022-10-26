@@ -10,29 +10,13 @@
   </div>
 
   <div class="default-container">
-    <form class="w-75 mx-auto mt-5" method="post">
-      <h1 class="text-center">Update user</h1>
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" value="{{ user.username|default('') }}"
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="text" class="form-control" id="email" name="email" value="{{ user.email|default('') }}"
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="text" class="form-control" id="password" name="password" placeholder="Password"
-      </div>
-      <div class="mb-3">
-        <label for="password" class="form-label">Confirm Password</label>
-        <input type="text" class="form-control" id="password_comfirm" name="password_comfirm" placeholder="Password"
-      </div>
-      <div class="mb-3">
-        <input type="hidden" name="csrf" value="{{ csrf_token('update_form') }}">
-      </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
-    {{ error | default("") }}
+    <h2>Update User</h2>
+    <p>You need to enter every data, it's a feature.
+
+    {{ form_start(userForm) }}
+      {{ form_row(userForm.email, {attr: { value : app.user.email } }) }}
+      {{ form_row(userForm.username, {attr: { value : app.user.username } }) }}
+      {{ form_widget(userForm) }}
+    {{ form_end(userForm) }}
   </div>
 {% endblock %}

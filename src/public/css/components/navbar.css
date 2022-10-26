@@ -26,13 +26,17 @@ body {margin:0;}
   border-right: 1px solid #bbb;
 }
 
-.navbar li a {
+.navbar li > a {
   display: block;
   color: white;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
   height: 55px;
+}
+
+#avatarLink {
+  padding: inherit;
 }
 
 /* .navbar li:nth-last-child(-n+2) { */

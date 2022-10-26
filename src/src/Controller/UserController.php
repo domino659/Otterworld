@@ -14,6 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\AppAuthentificator;
+use App\Form\UserNewFormType;
+use App\Form\UserUpdateFormType;
 
 class UserController extends AbstractController
 {
@@ -42,35 +44,29 @@ class UserController extends AbstractController
                       UserPasswordHasherInterface $hasher,
                       UserAuthenticatorInterface $authenticator,
                       AppAuthentificator $appAuthenticator): Response
-  {
-    if ($request->isMethod('POST')) {
-      if (!empty($request->request->get('password'))
-        && !empty($request->request->get('password_comfirm'))
-        && !empty($request->request->get('email'))
-        && !empty($request->request->get('username'))) {
-          if ($request->request->get('password') === $request->request->get('password_comfirm')
-            && $this->isCsrfTokenValid('register_form', $request->request->get('csrf'))) {
+    {
+      $form = $this->createForm(UserNewFormType::class);
 
-            $user = new User();
-            $user->setUsername($request->request->get('username'))
-              ->setEmail($request->request->get('email'))
-              ->setPassword($hasher->hashPassword($user, $request->request->get('password')))
-              // TODO CreatedAt UpdatedAt default value in user Entity
-              ->setCreatedAt(new \DateTime())
-              ->setUpdatedAt(new \DateTime());
-          
-            $em->persist($user);
-            $em->flush();
-          return $authenticator->authenticateUser($user, $appAuthenticator, $request);
-          }
-          return $this->render('user/new.html.twig', ['error' => 'Passwords do not match']);
+      $form->handleRequest($request);
+      if ($form->isSubmitted() && $form->isValid()) {
+        /** @var $user User */
+        $user = $form->getData();
+
+        $user->setPassword($hasher->hashPassword($user, $form['password']->getData()))
+        ->setCreatedAt(new \DateTime())
+        ->setUpdatedAt(new \DateTime());
+        
+        $em->persist($user);
+        $em->flush();
+        
+        return $authenticator->authenticateUser($user, $appAuthenticator, $request);
         }
-        return $this->render('user/new.html.twig', ['error' => 'All fields are required']);
+        return $this->render('user/new.html.twig', [
+          'userForm' => $form->createView(),
+        ]);	
     }
-    return $this->render('user/new.html.twig');  
-  }
   
-  // TODO Add update by specific value and not update everithing
+  // TODO Add update by specific value and not update everithing will correct duplicate email error
   /**
    * @param User $user
    * @param EntityManagerInterface $em
@@ -83,27 +79,26 @@ class UserController extends AbstractController
                         UserPasswordHasherInterface $hasher,
                         Request $request): Response
   {
-    if ($request->isMethod('POST')) {
-      if (!empty($request->request->get('username'))
-        && !empty($request->request->get('email'))
-        && !empty($request->request->get('password'))
-        && !empty($request->request->get('password_comfirm'))) {
-          if ($request->request->get('password') === $request->request->get('password_comfirm')
-            && $this->isCsrfTokenValid('update_form', $request->request->get('csrf'))) {
+    $form = $this->createForm(UserUpdateFormType::class);
+    
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+      /** @var $user User */
+      $data = $form->getData();
 
-          $user->setUsername($request->request->get('username'))
-            ->setEmail($request->request->get('email'))
-            ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
-          
-          $em->flush();
-          
-          return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
-        }
-        return $this->render('user/update.html.twig', ['error' => 'Passwords do not match']);
+      $plainPassword = $form['password']->getData();
+      $user->setEmail($form['email']->getData())
+           ->setUsername($form['username']->getData())
+           ->setPassword($hasher->hashPassword($user, $form['password']->getData()))
+           ->setUpdatedAt(new \DateTime());
+           
+      $em->flush();
+      
+      return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
       }
-      return $this->render('user/update.html.twig', ['error' => 'All fields are required']);
-    }
-    return $this->render('user/update.html.twig', ['user' => $user]);
+    return $this->render('user/update.html.twig', [
+      'userForm' => $form->createView(),
+    ]);	
   }
   
   /**
