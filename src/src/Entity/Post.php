@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -17,18 +18,23 @@ class Post
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['main'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['main'])]
     private ?string $title = null;
     
     #[ORM\Column(length: 100)]
+    #[Groups(['main'])]
     private ?string $slugs = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['main'])]
     private ?string $content = null;
 
     #[ORM\Column]
+    #[Groups(['main'])]
     private ?float $price = 0;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]

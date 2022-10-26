@@ -39,6 +39,17 @@ class UserRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return User[] Returns an array of User objects
+     */
+    public function findAllAskedUserByNewest(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.username IS NOT NULL')
+            ->orderBy('u.username', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */
