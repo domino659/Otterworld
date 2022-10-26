@@ -40,7 +40,7 @@ class PostController extends AbstractController
   
   /**
    * @return Response
-   * @Route("/user/sign-in", name="app_user_new")
+   * @Route("/user/new", name="app_user_new")
    */
   public function new(): Response
   {
