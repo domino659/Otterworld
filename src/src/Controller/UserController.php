@@ -25,7 +25,9 @@ class UserController extends AbstractController
    * @return Response
    * @Route("/user", name="admin_user_index")
    */
-  public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
+  public function index(UserRepository $userRepository,
+                        Request $request,
+                        PaginatorInterface $paginator): Response
   {
     $search = $request->query->get('u');
     $users = $userRepository->findAllAskedUserByAlphabeticalOrderPaginate();
@@ -34,7 +36,7 @@ class UserController extends AbstractController
       $request->query->getInt('page', 1), /*page number*/
       10 /*limit per page*/
     );
-    // dd($pagination);
+
     return $this->render('user/index.html.twig', [
       'pagination' => $pagination
     ]);

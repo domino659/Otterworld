@@ -11,22 +11,31 @@
   
   <div class="default-container">
     <div class="card">
-      <h4>{{ post.id }}</h4>
+      {# <label class="default-label">Id</label>
+      <h4>{{ post.id }}</h4> #}
+      <label class="default-label">Title</label>
       <h3>{{ post.title }}</h3>
+      <label class="default-label">Autor</label>
+      <p>{{ post.user.username }}</p>
+      <label class="default-label">Slug</label>
       <p>{{ post.slug }}</p>
+      <label class="default-label">Content</label>
       <p>{{ post.content }}</p>
-      <p>{{ post.price }}</p>
+      <label class="default-label">Price</label>
+      <p>{{ post.price }} €</p>
       <p>{{ post.createdAt|ago }}</p>
     </div>
-
 
     <div>
       <h2>{{ post.questions|length }} Question(s):</h2>
       <ul>
         {% for question in post.questions %}
           <div class="card">
-            <p>{{ question.id }}</p>
-            <p>{{ question.title }}</p>
+            {# <label class="default-label">Id</label>
+            <h4>{{ question.id }}</h4> #}
+            <label class="default-label">Title</label>
+            <h3>{{ question.title }}</h3>
+            <label class="default-label">Content</label>
             <p>{{ question.content }}</p>
             <p>{{ question.createdAt|ago }}</p>
           </div>

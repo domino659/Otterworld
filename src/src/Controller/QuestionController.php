@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
@@ -20,11 +21,20 @@ class QuestionController extends AbstractController
    * @return Response
    * @Route("/question", name="admin_question_index")
    */
-  public function index(QuestionRepository $questionRepository): Response
+  public function index(QuestionRepository $questionRepository,
+                   Request $request,
+                   PaginatorInterface $paginator): Response
   {
-    $questions = $questionRepository->findAll();
+    $search = $request->query->get('q');
+    $questions = $questionRepository->findAllAskedQuestionByCreatedAtOrderPaginate();
+    $pagination = $paginator->paginate(
+      $questions,
+      $request->query->getInt('page', 1),
+      10
+    );
+
     return $this->render('question/index.html.twig', [
-      'questions' => $questions,
+      'pagination' => $pagination
     ]);
   }
 

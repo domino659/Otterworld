@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class PostNewType extends AbstractType
 {
@@ -17,7 +18,7 @@ class PostNewType extends AbstractType
             ->add('title')
             ->add('slug')
             ->add('content', TextType::class)
-            ->add('price')
+            ->add('price', NumberType::class)
             ->add('Create', SubmitType::class)
         ;
     }

@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Post;
 use App\Repository\PostRepository;
@@ -19,11 +20,20 @@ class PostController extends AbstractController
    * @return Response
    * @Route("/post", name="admin_post_index")
    */
-  public function index(PostRepository $postRepository): Response
+  public function index(PostRepository $postRepository,
+                        Request $request,
+                        PaginatorInterface $paginator): Response
   {
-    $posts = $postRepository->findAll();
+    $search = $request->query->get('p');
+    $posts = $postRepository->findAllAskedPostByCreatedAtOrderPaginate();
+    $pagination = $paginator->paginate(
+      $posts,
+      $request->query->getInt('page', 1),
+      10
+    );
+
     return $this->render('post/index.html.twig', [
-      'posts' => $posts,
+      'pagination' => $pagination
     ]);
   }
 
