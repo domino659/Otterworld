@@ -31,6 +31,10 @@
             <p>{{ question.createdAt|ago }}</p>
           </div>
         {% endfor %}
+      </ul>
+      <a href="{{ path('app_question_new', { id: post.id }) }}">
+        <button type="button" class="btn btn-light">Answer</button>
+      </a>
     </div>  
   </div>
   

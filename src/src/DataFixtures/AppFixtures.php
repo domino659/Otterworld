@@ -23,7 +23,8 @@ class AppFixtures extends Fixture
         });
 
         QuestionFactory::createMany(200, function () {
-            return ['post' => PostFactory::random()];
+            return ['user' => UserFactory::random(),
+                    'post' => PostFactory::random()];
         });
     }
 }

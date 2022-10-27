@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Post;
 use App\Repository\PostRepository;
+use App\Form\PostNewType;
 
 class PostController extends AbstractController
 {
@@ -26,48 +27,43 @@ class PostController extends AbstractController
     ]);
   }
 
-    /**
+  /**
+   * @param EntityManagerInterface $em
+   * @param Request $request
+   * @return Response
+   * @Route("/post/new", name="app_post_new")
+   */
+  public function new(Request $request,
+                      EntityManagerInterface $em): Response
+  {
+    $form = $this->createForm(PostNewType::class);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+        /** @var $post Post */
+        $post = $form->getData();
+        $post->setUser($this->getUser())
+             ->setCreatedAt(new \DateTime())
+             ->setUpdatedAt(new \DateTime());
+        $em->persist($post);
+        $em->flush();
+      
+        return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    }
+    return $this->render('post/new.html.twig', [
+      'postForm' => $form->createView(),
+    ]);	
+  }
+  
+  /**
    * @param Post $post
    * @return Response
    * @Route("/post/{id}", name="app_post_show")
    */
-  public function show(Post $post) : Response
+  public function show(Post $post): Response
   {
     return $this->render('post/show.html.twig', [
       'post' => $post,
     ]);
   }
-  
-  /**
-   * @return Response
-   * @Route("/user/new", name="sign_in")
-   */
-  public function new(): Response
-  {
-    return $this->render('post/new.html.twig');
-  }
-  
-    /**
-   * @param EntityManagerInterface $em
-   * @param Request $request
-   * @return Response
-   * @Route("/user/create", name="app_user_create", methods="POST")
-   */
-  public function create(EntityManagerInterface $em, Request $request, UserPasswordHasherInterface $hasher): Response
-  {
-    $loggedUser = $this->getUser();
-
-    $post = new User();
-    $user->setUsername($request->request->get('username'))
-      ->setEmail($request->request->get('email'))
-      ->setPassword($hasher->hashPassword($user, 'password'))
-      ->setIsAdmin(false)
-      ->setCreatedAt(new \DateTime())
-      ->setUpdatedAt(new \DateTime());
-
-    $em->persist($user);
-    $em->flush();
-
-    return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
-  }
 }
+

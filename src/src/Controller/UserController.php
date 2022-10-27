@@ -15,8 +15,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\AppAuthentificator;
-use App\Form\UserNewFormType;
-use App\Form\UserUpdateFormType;
+use App\Form\UserNewType;
+use App\Form\UserUpdateType;
 
 class UserController extends AbstractController
 {
@@ -26,13 +26,6 @@ class UserController extends AbstractController
    * @Route("/user", name="admin_user_index")
    */
   public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
-  // {
-  //   $users = $userRepository->findAll();
-
-  //   return $this->render('user/index.html.twig', [
-  //     'users' => $users,
-  //   ]);
-  // }
   {
     $search = $request->query->get('u');
     $users = $userRepository->findAllAskedUserByAlphabeticalOrderPaginate();
@@ -48,23 +41,11 @@ class UserController extends AbstractController
 
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
   /**
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/user/sign-in", name="sign_in")
+   * @Route("/user/new", name="app_user_new")
    */
   public function new(Request $request,
                       EntityManagerInterface $em,
@@ -72,25 +53,23 @@ class UserController extends AbstractController
                       UserAuthenticatorInterface $authenticator,
                       AppAuthentificator $appAuthenticator): Response
     {
-      $form = $this->createForm(UserNewFormType::class);
+      $form = $this->createForm(UserNewType::class);
 
       $form->handleRequest($request);
       if ($form->isSubmitted() && $form->isValid()) {
         /** @var $user User */
         $user = $form->getData();
-
         $user->setPassword($hasher->hashPassword($user, $form['password']->getData()))
-        ->setCreatedAt(new \DateTime())
-        ->setUpdatedAt(new \DateTime());
-        
+             ->setCreatedAt(new \DateTime())
+             ->setUpdatedAt(new \DateTime());
         $em->persist($user);
         $em->flush();
         
         return $authenticator->authenticateUser($user, $appAuthenticator, $request);
-        }
-        return $this->render('user/new.html.twig', [
-          'userForm' => $form->createView(),
-        ]);	
+      }
+      return $this->render('user/new.html.twig', [
+        'userForm' => $form->createView(),
+      ]);	
     }
   
   // TODO Add update by specific value and not update everithing will correct duplicate email error
@@ -106,19 +85,16 @@ class UserController extends AbstractController
                         UserPasswordHasherInterface $hasher,
                         Request $request): Response
   {
-    $form = $this->createForm(UserUpdateFormType::class);
-    
+    $form = $this->createForm(UserUpdateType::class);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var $user User */
       $data = $form->getData();
-
       $plainPassword = $form['password']->getData();
       $user->setEmail($form['email']->getData())
            ->setUsername($form['username']->getData())
            ->setPassword($hasher->hashPassword($user, $form['password']->getData()))
            ->setUpdatedAt(new \DateTime());
-           
       $em->flush();
       
       return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);

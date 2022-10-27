@@ -1,0 +1,21 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  question_new
+{% endblock %}
+
+{% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+
+  <div class="default-container">
+    <h2>Question Creation</h2>
+    {{ form_start(questionForm) }}
+      {{ form_widget(questionForm) }}
+    {{ form_end(questionForm) }}
+  </div>
+
+{% endblock %}

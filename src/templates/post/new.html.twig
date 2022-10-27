@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  post_new
+{% endblock %}
+
+{% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+  <div class="default-container">
+    <h2>Post Creation</h2>
+    {{ form_start(postForm) }}
+      {{ form_widget(postForm) }}
+    {{ form_end(postForm) }}
+  </div>
+
+{% endblock %}

@@ -65,28 +65,4 @@ final class UserFactory extends ModelFactory
     {
         return User::class;
     }
-
-    // /**
-    //  * @param Request $request
-    //  * @param EntityManagerInterface $em
-    //  * @return Response
-    //  * @Route("/user/sign-in", name="sign_in")
-    //  */
-
-    // public function new(Request $request,
-    //                     EntityManagerInterface $em,
-    //                     UserPasswordHasherInterface $hasher,
-    //                     UserAuthentificatorInterface $authentificator,
-    //                     LoginFormAuthentificator $loginFormAuthentificator): Response
-    // {
-    //     $user = new User();
-    //     $user->setUsername($request->request->get('username'))
-    //     ->setEmail($request->request->get('email'))
-    //     ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
-
-    //     $em->persist($user);
-    //     $em->flush();
-
-    //     return $authentificator->authenticateUser($user, $loginFormAuthetificator, $request);
-    // }
 }
