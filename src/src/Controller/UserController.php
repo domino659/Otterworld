@@ -33,11 +33,9 @@ class UserController extends AbstractController
   //     'users' => $users,
   //   ]);
   // }
-
   {
     $search = $request->query->get('u');
     $users = $userRepository->findAllAskedUserByAlphabeticalOrderPaginate();
-    // dd($users);
     $pagination = $paginator->paginate(
       $users, /* query NOT result */
       $request->query->getInt('page', 1), /*page number*/

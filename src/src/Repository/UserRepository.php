@@ -40,6 +40,20 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param $value
+     * @return int|mixed|string
+     */
+    public function searchByName($value)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.username LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
      * @return User[] Returns an array of User objects
      */
     public function findAllAskedUserByAlphabeticalOrder(): array
