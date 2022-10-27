@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
-
 use App\Service\MarkdownHelper;
 
 class QuestionController extends AbstractController

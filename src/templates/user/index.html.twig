@@ -11,37 +11,44 @@
 
   <div class="default-container">
     <form action="{{ path('search_user') }}">
-      <input type="search" class="form-control form-control-dark" name="s" placeholder="Search" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
+      <div class="flex">
+        <input type="search" class="form-control form-control-dark" name="s" placeholder="Search" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
+        <button type="submit" class="btn btn-light">Search</button>
+        <a href="{{ path('admin_user_index') }}" class="btn btn-dark">Reset</a></li>
+      </div>
     </form>
-
-    {% if app.request.query.get('s')  %}
-      <a href="{{ path('admin_user_index') }}"><h4>Return to index</h4></a></li>
-      {% for user in search_user | default('') %}
-      <p>{{ user.id }}</p>
-      <p>{{ user.username }}</p>
-      <p>{{ user.email }}</p>
-      <p>{{ user.IsAdmin ?'Yes':'No'}}</p>
-      {% if is_granted("USER_VIEW", user) %}
-        <a href="/">More details</a>
-      {% endif %}
-      <br>
-      <br>
-      {% endfor %}
-    {% endif %}
-
-    {% if (search_user is not defined) %}
-      <h3>{{ pagination.getTotalItemCount | default(0) }} Total Users</h3>
-      {% for user in pagination | default('') %}
-        <div>
+    <div class=box>
+      {% if app.request.query.get('s')  %}
+        {% for user in search_user | default('') %}
+        <div class="card">
           <p>{{ user.id }}</p>
-          <p>{{ user.username }}</p>
-          <p>{{ user.email }}</p>
           {% if is_granted("USER_VIEW", user) %}
-            <a href="{{ path('app_user_show', { email: user.email }) }}">More details</a>
+            <a class="minor_link" href="{{ path('app_user_show', { email: user.email }) }}"><h3>{{ user.username }}</h3></a>
+          {% else %}
+            <h3>{{ user.username }}</h3>
           {% endif %}
+          <p>{{ user.email }}</p>
+          <p>{{ user.IsAdmin ?'Yes':'No'}}</p>
+
         </div>
-      {% endfor %}
-      {{ knp_pagination_render(pagination) }}
-    {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% if (search_user is not defined) %}
+        <h3>{{ pagination.getTotalItemCount | default(0) }} Total User</h3>
+        {% for user in pagination | default('') %}
+          <div class="card">
+            <p>{{ user.id }}</p>
+            {% if is_granted("USER_VIEW", user) %}
+              <a class="minor_link" href="{{ path('app_user_show', { email: user.email }) }}"><h3>{{ user.username }}</h3></a>
+            {% else %}
+              <h3>{{ user.username }}</h3>
+            {% endif %}
+            <p>{{ user.email }}</p>
+          </div>
+        {% endfor %}
+        {{ knp_pagination_render(pagination) }}
+      {% endif %}
+    </div>
   </div>
 {% endblock %}

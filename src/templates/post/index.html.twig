@@ -11,17 +11,14 @@
 
   <div class="default-container">
     {% for post in posts %}
-      <a href="{{ path('app_post_show', { id: post.id }) }}">{{ post.title }}</a>
-      <p>{{ post.slug }}</p>
-      <p>{{ post.content }}</p>
-      <p>{{ post.price }}</p>
-      <p>{{ post.createdAt|ago }}</p>
-
-      {# <a href="{{ path('app_user_show', { email: user.email }) }}">
-          More details #}
-      {# </a> #}
-      <br>
-      <br>
+      <div class="card">
+        <p>{{ post.id }}</p>
+        <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
+        <p>{{ post.slug }}</p>
+        <p>{{ post.content }}</p>
+        <p>{{ post.price }}</p>
+        <p>{{ post.createdAt|ago }}</p>
+      </div>
     {% endfor %}
   </div>
 {% endblock %}

@@ -11,12 +11,13 @@
   
   <div class="default-container">
     {% for question in questions %}
-      <p>{{ question.id }}</p>
-      <p>{{ question.title }}</p>
-      <p>{{ question.content }}</p>
-      <p>{{ question.createdAt|ago }}</p>
-      <br>
-      <br>
+      <div class="card">
+        <p>{{ question.id }}</p>
+        <a class="minor_link" href="{{ path('app_post_show', { id: question.post.id }) }}"><h3>{{ question.post.title }}</h3></a>
+        <h4>{{ question.title }}</h4>
+        <p>{{ question.content }}</p>
+        <p>{{ question.createdAt|ago }}</p>
+      </div>
     {% endfor %}
   </div>
 {% endblock %}

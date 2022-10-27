@@ -1,0 +1,47 @@
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/components/homepage.css') }}"
+{% endblock %}
+
+{% block body %}
+  <div>
+    <a href="{{ path('index') }}">
+      <div class="logo">
+        <div>
+          <img src="{{ asset('images/otter_icon.png') }}">
+        </div>
+        <h2>OTTERWORLD</h2>
+        <h3>Click me!</h3>
+      </div>
+    </a>
+    <div class="row">
+      <div class="column">
+        <img src="{{ asset('images/otter/otter_0.jpg') }}">
+        <img src="{{ asset('images/otter/otter_1.jpg') }}">
+        <img src="{{ asset('images/otter/otter_2.jpg') }}">
+        <img src="{{ asset('images/otter/otter_3.jpg') }}">
+        <img src="{{ asset('images/otter/otter_0.jpg') }}">
+      </div>
+      <div class="column">
+        <img src="{{ asset('images/otter/otter_4.jpg') }}">
+        <img src="{{ asset('images/otter/otter_5.jpg') }}">
+        <img src="{{ asset('images/otter/otter_6.jpg') }}">
+        <img src="{{ asset('images/otter/otter_7.jpg') }}">
+        <img src="{{ asset('images/otter/otter_4.jpg') }}">
+      </div>
+      <div class="column">
+        <img src="{{ asset('images/otter/otter_8.jpg') }}">
+        <img src="{{ asset('images/otter/otter_9.jpg') }}">
+        <img src="{{ asset('images/otter/otter_10.jpg') }}">
+        <img src="{{ asset('images/otter/otter_12.jpg') }}">
+        <img src="{{ asset('images/otter/otter_8.jpg') }}">
+      </div>
+      <div class="column">
+        <img src="{{ asset('images/otter/otter_13.jpg') }}">
+        <img src="{{ asset('images/otter/otter_14.jpg') }}">
+        <img src="{{ asset('images/otter/otter_15.jpg') }}">
+        <img src="{{ asset('images/otter/otter_16.jpg') }}">
+        <img src="{{ asset('images/otter/otter_13.jpg') }}">
+      </div>
+    </div>
+  </div>
+{% endblock %}
