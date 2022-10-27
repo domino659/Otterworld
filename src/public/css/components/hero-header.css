@@ -1,6 +1,6 @@
 .hero-header {
   background-image: url(../../images/hero_header.png);
-  height: 350px;
+  height: 400px;
   width: -webkit-fill-available;
   background-size: cover;
   background-repeat: no-repeat;
@@ -10,5 +10,5 @@
   background-color: rgba(0, 0, 0, 0.37);
   content: '';
   display: block;
-  height: 350px;
+  height: 400px;
 }

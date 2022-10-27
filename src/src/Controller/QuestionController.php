@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
-
 use App\Service\MarkdownHelper;
 
 class QuestionController extends AbstractController
@@ -17,7 +16,7 @@ class QuestionController extends AbstractController
   /**
    * @param EntytyManagerInterface $em
    * @return Response
-   * @Route("/question", name="app_question_index")
+   * @Route("/question", name="admin_question_index")
    */
   public function index(QuestionRepository $questionRepository): Response
   {

@@ -7,6 +7,7 @@ use App\Repository\PostRepository;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 /**
  * @extends ModelFactory<Post>
@@ -41,7 +42,6 @@ final class PostFactory extends ModelFactory
         return [
             // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
             'title' => self::faker()->userName(),
-            'slugs' => self::faker()->slug(),
             'content' => self::faker()->text(),
             'price' => self::faker()->randomFloat(),
             'createdAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
@@ -51,10 +51,11 @@ final class PostFactory extends ModelFactory
 
     protected function initialize(): self
     {
-        // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
-        return $this
-            // ->afterInstantiate(function(Post $post): void {})
-        ;
+        return $this->afterInstantiate(function(Post $post) {
+            $slugger = new AsciiSlugger();
+            $post->setSlug($slugger->slug($post->getTitle()));
+        });
+        // return $this;
     }
 
     protected static function getClass(): string

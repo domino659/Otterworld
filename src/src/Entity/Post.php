@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -17,24 +18,31 @@ class Post
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['main'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['main'])]
     private ?string $title = null;
     
     #[ORM\Column(length: 100)]
-    private ?string $slugs = null;
+    #[Gedmo\Slug(fields: ['title'])]
+    #[Groups(['main'])]
+    private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['main'])]
     private ?string $content = null;
 
     #[ORM\Column]
+    #[Groups(['main'])]
     private ?float $price = 0;
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Question::class)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Question::class, cascade: ["all"])]
+
     private Collection $questions;
 
     public function __construct()
@@ -59,14 +67,14 @@ class Post
         return $this;
     }
 
-    public function getSlugs(): ?string
+    public function getSlug(): ?string
     {
-        return $this->slugs;
+        return $this->slug;
     }
 
-    public function setSlugs(string $slugs): self
+    public function setSlug(string $slug): self
     {
-        $this->slugs = $slugs;
+        $this->slug = $slug;
 
         return $this;
     }

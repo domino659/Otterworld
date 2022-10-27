@@ -9,6 +9,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -19,30 +22,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['main'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Assert\NotBlank(message: "Please enter an email")]
+    #[Assert\Email] 
+    #[Groups(['main'])]
     private ?string $email = null;
     
-    // Security
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Please enter a username")]
+    #[Groups(['main'])]
+    private ?string $username = null;
+
+    #[Column(type: "json")]
+    #[Groups(['main'])]
     private $roles = [];
     
     #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column]
+    #[Groups(['main'])]
     private ?bool $isAdmin = false;
     
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
-    
     #[ORM\Column]
+    #[Groups(['main'])]
     private ?int $votes = 0;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class, cascade: ["all"])]
+    #[Groups(['main'])]
     private Collection $posts;
 
     public function __construct()
@@ -53,6 +63,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getUsername(): ?string

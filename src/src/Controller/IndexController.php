@@ -9,7 +9,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/", name="homepage")
+     */
+    public function homepage(): Response
+    {
+        return $this->render('index/homepage.html.twig');
+    }
+
+    /**
+     * @Route("/index", name="index")
      */
     public function index(): Response
     {

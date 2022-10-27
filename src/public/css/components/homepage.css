@@ -1,0 +1,80 @@
+body{
+  overflow: hidden;
+}
+
+.homepage{
+
+}
+
+.logo div, h2, h3 {
+  position: absolute;
+  display: block;
+  z-index: 1;
+}
+
+.logo div {
+  top: calc(50% - 98px);
+  left: calc(50% - 98px);
+  background-color: whitesmoke;
+  border-radius: 100%;
+  padding: 8px;
+}
+
+.logo h2, h3 {
+  color: whitesmoke;
+  text-align: center;
+}
+
+.logo h2 {
+  top: calc(50% + 90px);
+  left: calc(50% - 104px);
+  margin-top: 10px;
+}
+
+.logo h3 {
+  top: calc(50% + 125px);
+  left: calc(50% - 58px);
+  margin-top: 10px;
+}
+
+img {
+  filter: brightness(75%);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px;
+}
+
+/* Create four equal columns that sits next to each other */
+.column {
+  flex: 25%;
+  max-width: 25%;
+  padding: 0px;
+}
+
+.column img {
+  /* margin-top: 8px; */
+  vertical-align: middle;
+  width: 100%;
+  height: 20%;
+  filter: blur(1px) brightness(75%);
+
+}
+
+/* Responsive layout - makes a two column-layout instead of four columns */
+@media screen and (max-width: 800px) {
+  .column {
+    flex: 50%;
+    max-width: 50%;
+  }
+}
+
+/* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    flex: 100%;
+    max-width: 100%;
+  }
+}

@@ -70,7 +70,7 @@ final class UserFactory extends ModelFactory
     //  * @param Request $request
     //  * @param EntityManagerInterface $em
     //  * @return Response
-    //  * @Route("/user/sign-in", name="app_user_new")
+    //  * @Route("/user/sign-in", name="sign_in")
     //  */
 
     // public function new(Request $request,
