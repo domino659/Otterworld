@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  post_update
+{% endblock %}
+
+{% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+
+  <div class="default-container">
+    <h2>Update Post</h2>
+    {{ form_start(postForm) }}
+      {{ form_row(postForm.title, {attr: { value : post.title } }) }}
+      {{ form_row(postForm.slug, {attr: { value : post.slug } }) }}
+      {{ form_row(postForm.content, {attr: { value : post.content } }) }}
+      {{ form_row(postForm.price, {attr: { value : post.price } }) }}
+    {{ form_end(postForm) }}
+  </div>
+{% endblock %}

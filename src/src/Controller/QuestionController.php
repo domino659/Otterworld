@@ -13,6 +13,7 @@ use App\Entity\Question;
 use App\Repository\QuestionRepository;
 use App\Repository\PostRepository;
 use App\Form\QuestionNewType;
+use App\Form\QuestionUpdateType;
 
 class QuestionController extends AbstractController
 {
@@ -48,13 +49,11 @@ class QuestionController extends AbstractController
                       EntityManagerInterface $em,
                       PostRepository $postRepository): Response
   {
-    $form = $this->createForm(QuestionNewType::class);
+    $post = $postRepository->findPostById($id);
+    $question = new Question();
+    $form = $this->createForm(QuestionNewType::class, $question);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-      $post = $postRepository->findPostById($id);
-      /** @var $question Question */
-
-      $question = $form->getData();
       $question->setUser($this->getUser())
                ->setPost($post)
                ->setCreatedAt(new \DateTime())
@@ -67,5 +66,46 @@ class QuestionController extends AbstractController
     return $this->render('question/new.html.twig', [
       'questionForm' => $form->createView(),
     ]);	
+  }
+
+  /**
+   * @param Question $question
+   * @param EntityManagerInterface $em
+   * @param Request $request
+   * @return Response
+   * @Route("/question/{id}/update", name="app_question_update")
+   */
+  public function update(int $id,
+                         Question $question,
+                         EntityManagerInterface $em,
+                         Request $request): Response
+  {
+    $question =  $em->getRepository(Question::class)->findOneBy(['id' => $id]);
+    $form = $this->createForm(QuestionUpdateType::class, $question);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $em->flush();
+      // dd($question);
+      return $this->redirectToRoute('app_post_show', ['id' => $question->getPost()->getId()]);
+    }
+    return $this->render('question/update.html.twig', [
+      'questionForm' => $form->createView(),
+      'question' => $question,
+    ]);
+  }
+
+  /**
+   * @param Question $question
+   * @param EntityManagerInterface $em
+   * @return Response
+   * @Route("/question/{id}/delete", name="app_question_delete")
+   */
+  public function delete(Question $question, EntityManagerInterface $em): Response
+  {
+    $em->remove($question);
+    $em->flush();
+    
+    return $this->redirectToRoute('app_post_show', ['id' => $question->getPost()->getId()]);
   }
 }

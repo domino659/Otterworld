@@ -14,4 +14,28 @@
     <h1>Hello World!</h1>
     <img src="{{ asset('images/otter_slide.webp') }}">
   </div>
+
+  <div class="default-container">
+    <div class="box">
+      <h3>{{ pagination.getTotalItemCount | default(0) }} Total Post(s)</h3>
+      {% for post in pagination | default('') %}
+        <div class="card">
+          {# <label class="default-label">Id</label>
+          <h4>{{ post.id }}</h4> #}
+          <label class="default-label">Title</label>
+          <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
+          <label class="default-label">Autor</label>
+          <p>{{ post.user.username }}</p>
+          <label class="default-label">Slug</label>
+          <p>{{ post.slug }}</p>
+          <label class="default-label">Content</label>
+          <p>{{ post.content }}</p>
+          <label class="default-label">Price</label>
+          <p>{{ post.price }} €</p>
+          <p>{{ post.createdAt|ago }}</p>
+        </div>
+      {% endfor %}
+      {{ knp_pagination_render(pagination) }}
+    </div>
+  </div>
 {% endblock %}

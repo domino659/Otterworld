@@ -38,7 +38,7 @@
       {% endif %}
 
       {% if (search_user is not defined) %}
-        <h3>{{ pagination.getTotalItemCount | default(0) }} Total User</h3>
+        <h3>{{ pagination.getTotalItemCount | default(0) }} Total User(s)</h3>
         {% for user in pagination | default('') %}
           <div class="card">
             {# <label class="default-label">Id</label>

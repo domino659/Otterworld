@@ -12,6 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Post;
 use App\Repository\PostRepository;
 use App\Form\PostNewType;
+use App\Form\PostUpdateType;
 
 class PostController extends AbstractController
 {
@@ -46,11 +47,10 @@ class PostController extends AbstractController
   public function new(Request $request,
                       EntityManagerInterface $em): Response
   {
-    $form = $this->createForm(PostNewType::class);
+    $post = new Post();
+    $form = $this->createForm(PostNewType::class, $post);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
-        /** @var $post Post */
-        $post = $form->getData();
         $post->setUser($this->getUser())
              ->setCreatedAt(new \DateTime())
              ->setUpdatedAt(new \DateTime());
@@ -64,6 +64,47 @@ class PostController extends AbstractController
     ]);	
   }
   
+  /**
+   * @param Post $post
+   * @param EntityManagerInterface $em
+   * @param Request $request
+   * @return Response
+   * @Route("/post/{id}/update", name="app_post_update")
+   */
+  public function update(int $id,
+                         Post $post,
+                         EntityManagerInterface $em,
+                         Request $request): Response
+  {
+    $post =  $em->getRepository(Post::class)->findOneBy(['id' => $id]);
+    $form = $this->createForm(PostUpdateType::class, $post);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+      $em->flush();
+
+      return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    }
+    return $this->render('post/update.html.twig', [
+      'postForm' => $form->createView(),
+      'post' => $post,
+    ]);
+  }
+
+  /**
+   * @param Post $post
+   * @param EntityManagerInterface $em
+   * @return Response
+   * @Route("/post/{id}/delete", name="app_post_delete")
+   */
+  public function delete(Post $post, EntityManagerInterface $em): Response
+  {
+    $em->remove($post);
+    $em->flush();
+    
+    return $this->redirectToRoute('index');
+  }
+
   /**
    * @param Post $post
    * @return Response

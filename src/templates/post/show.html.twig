@@ -25,6 +25,16 @@
       <p>{{ post.price }} €</p>
       <p>{{ post.createdAt|ago }}</p>
     </div>
+    <div>
+    {% if app.user.email == post.user.email %}
+      <a href="{{ path('app_post_update', {'id': post.id}) }}">
+        <button type="button" class="btn btn-light">Update</button>
+      </a>
+      <a href="{{ path('app_post_delete', { id: post.id }) }}">
+        <button type="button" class="btn btn-dark">Delete</button>
+      </a>
+    {% endif %}
+    </div>
 
     <div>
       <h2>{{ post.questions|length }} Question(s):</h2>
@@ -39,6 +49,14 @@
             <p>{{ question.content }}</p>
             <p>{{ question.createdAt|ago }}</p>
           </div>
+          {% if app.user.email == question.user.email %}
+            <a href="{{ path('app_question_update', {'id': question.id}) }}">
+              <button type="button" class="btn btn-light">Update</button>
+            </a>
+            <a href="{{ path('app_question_delete', { id: question.id }) }}">
+              <button type="button" class="btn btn-dark">Delete</button>
+            </a>
+          {% endif %}
         {% endfor %}
       </ul>
       <a href="{{ path('app_question_new', { id: post.id }) }}">
