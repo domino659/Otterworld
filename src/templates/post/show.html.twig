@@ -1,37 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  post_show
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
   </div>
   
   <div class="default-container">
-    {{ include('post/post.html.twig') }}  
+    {{ include('post/post.html.twig') }}
     <div>
       <h2>{{ post.questions|length }} Question(s):</h2>
       <ul>
         {% for question in post.questions|reverse %}
-          <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ question.id }}</h4> #}
-            <label class="default-label">Title</label>
-            <h3>{{ question.title }}</h3>
-            <label class="default-label">Content</label>
-            <p>{{ question.content }}</p>
-            <p>{{ question.createdAt|ago }}</p>
-          </div>
-          {% if app.user.email == question.user.email %}
-            <a href="{{ path('app_question_update', {'id': question.id}) }}">
-              <button type="button" class="btn btn-light">Update</button>
-            </a>
-            <a href="{{ path('app_question_delete', { id: question.id }) }}">
-              <button type="button" class="btn btn-dark">Delete</button>
-            </a>
-          {% endif %}
+          {{ include('question/question.html.twig') }}
         {% endfor %}
       </ul>
       <a href="{{ path('app_question_new', { id: post.id }) }}">

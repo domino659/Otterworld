@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  user_index
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
@@ -12,23 +8,26 @@
   <div class="default-container">
     <form action="{{ path('search_user') }}">
       <div class="flex">
-        <input type="search" class="form-control form-control-dark" name="u" placeholder="Search" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
-        <a href="{{ path('admin_user_index') }}" class="btn btn-dark">Reset</a></li>
+        <input type="search" class="form-control form-control-dark" name="u" placeholder="Search by name" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
+        <a href="{{ path('user_index') }}" class="btn btn-dark">Reset</a></li>
         <button type="submit" class="btn btn-light">Search</button>
       </div>
     </form>
     <div class="box">
       {% if app.request.query.get('u')  %}
         {% for user in search_user | default('') %}
-          {{ include('components/navbar.html.twig') }}
+          <div class="card">
+            {{ include('user/user.html.twig') }}
+          </div>
         {% endfor %}
       {% endif %}
 
       {% if (search_user is not defined) %}
         <h3>{{ pagination.getTotalItemCount | default(0) }} Total User(s)</h3>
         {% for user in pagination | default('') %}
-          {{ include('components/navbar.html.twig') }}
-        {% endfor %}
+          <div class="card">
+            {{ include('user/user.html.twig') }}
+          </div>        {% endfor %}
         {{ knp_pagination_render(pagination) }}
       {% endif %}
     </div>

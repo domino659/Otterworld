@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,17 +37,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['main'])]
     private ?string $username = null;
 
-    #[Column(type: "json")]
-    #[Groups(['main'])]
+    #[ORM\Column(type: 'json')]
     private $roles = [];
     
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column]
-    #[Groups(['main'])]
-    private ?bool $isAdmin = false;
-    
     #[ORM\Column]
     #[Groups(['main'])]
     private ?int $votes = 0;
@@ -97,18 +93,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function isIsAdmin(): ?bool
-    {
-        return $this->isAdmin;
-    }
-
-    public function setIsAdmin(bool $isAdmin): self
-    {
-        $this->isAdmin = $isAdmin;
 
         return $this;
     }
@@ -191,6 +175,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -199,7 +184,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
+        
         return $this;
     }
 

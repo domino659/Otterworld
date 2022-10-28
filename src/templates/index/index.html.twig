@@ -1,16 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  Index
-{% endblock %}
-
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
   </div>
   <div class="default-container">
     <br>
+    {# Totally necessary #}
     <h1>Hello World!</h1>
     <img src="{{ asset('images/otter_slide.webp') }}">
   </div>

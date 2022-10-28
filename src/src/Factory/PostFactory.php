@@ -42,7 +42,7 @@ final class PostFactory extends ModelFactory
         return [
             'title' => self::faker()->userName(),
             'content' => self::faker()->text(),
-            'price' => self::faker()->randomFloat(),
+            'price' => self::faker()->numberBetween(50, 500),
             'image_filename' => "otter_profile.jpg",
             'createdAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
             'updatedAt' => self::faker()->dateTimeBetween('-50 days', '-1 second')

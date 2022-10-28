@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  user_update
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
@@ -13,8 +9,8 @@
     <h2>Update User</h2>
     <p>You need to enter every data, it's a feature.
     {{ form_start(userForm) }}
-      {{ form_row(userForm.email, {attr: { value : app.user.email } }) }}
-      {{ form_row(userForm.username, {attr: { value : app.user.username } }) }}
+      {{ form_row(userForm.email, {attr: { value : user.email } }) }}
+      {{ form_row(userForm.username, {attr: { value : user.username } }) }}
       {{ form_widget(userForm) }}
     {{ form_end(userForm) }}
   </div>

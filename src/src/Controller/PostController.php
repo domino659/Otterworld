@@ -8,7 +8,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+use App\Entity\User;
 use App\Entity\Post;
 use App\Repository\PostRepository;
 use App\Form\PostType;
@@ -19,7 +21,7 @@ class PostController extends AbstractController
   /**
    * @param EntytyManagerInterface $em
    * @return Response
-   * @Route("/post", name="admin_post_index")
+   * @Route("app/post", name="post_index")
    */
   public function index(PostRepository $postRepository,
                         Request $request,
@@ -42,7 +44,7 @@ class PostController extends AbstractController
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/post/new", name="app_post_new")
+   * @Route("app/post/new", name="app_post_new")
    */
   public function new(Request $request,
                       EntityManagerInterface $em,
@@ -60,7 +62,6 @@ class PostController extends AbstractController
         $fileName = $helper->uploadPostImage($newImage);
         $post->setImageFilename($fileName);
       }
-
       $em->persist($post);
       $em->flush();
     
@@ -76,7 +77,7 @@ class PostController extends AbstractController
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/post/{id}/update", name="app_post_update")
+   * @Route("app/post/{id}/update", name="app_post_update")
    */
   public function update(int $id,
                          Post $post,
@@ -96,7 +97,6 @@ class PostController extends AbstractController
         $fileName = $helper->uploadPostImage($newImage);
         $post->setImageFilename($fileName);
       }
-
       $em->flush();
 
       return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
@@ -111,7 +111,7 @@ class PostController extends AbstractController
    * @param Post $post
    * @param EntityManagerInterface $em
    * @return Response
-   * @Route("/post/{id}/delete", name="app_post_delete")
+   * @Route("app/post/{id}/delete", name="app_post_delete")
    */
   public function delete(Post $post, EntityManagerInterface $em): Response
   {
@@ -124,7 +124,7 @@ class PostController extends AbstractController
   /**
    * @param Post $post
    * @return Response
-   * @Route("/post/{id}", name="app_post_show")
+   * @Route("app/post/{id}", name="app_post_show")
    */
   public function show(Post $post): Response
   {

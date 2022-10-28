@@ -19,7 +19,7 @@ class QuestionController extends AbstractController
   /**
    * @param EntytyManagerInterface $em
    * @return Response
-   * @Route("/question", name="admin_question_index")
+   * @Route("admin/question", name="question_index")
    */
   public function index(QuestionRepository $questionRepository,
                    Request $request,
@@ -42,7 +42,7 @@ class QuestionController extends AbstractController
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/question/{id}/new", name="app_question_new")
+   * @Route("post/question/{id}/new", name="app_question_new")
    */
   public function new(int $id, Request $request,
                       EntityManagerInterface $em,
@@ -72,7 +72,7 @@ class QuestionController extends AbstractController
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/question/{id}/update", name="app_question_update")
+   * @Route("post/question/{id}/update", name="app_question_update")
    */
   public function update(int $id,
                          Question $question,
@@ -98,7 +98,7 @@ class QuestionController extends AbstractController
    * @param Question $question
    * @param EntityManagerInterface $em
    * @return Response
-   * @Route("/question/{id}/delete", name="app_question_delete")
+   * @Route("post/question/{id}/delete", name="app_question_delete")
    */
   public function delete(Question $question, EntityManagerInterface $em): Response
   {

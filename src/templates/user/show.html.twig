@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  user_show
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
@@ -11,14 +7,8 @@
 
   <div class="default-container">
     <div class="card">
-      {# <label class="default-label">Id</label>
-      <h4>{{ user.id }}</h4> #}
-      <label class="default-label">Username</label>
-      <h1>{{ user.username }}</h1>
-      <label class="default-label">Email</label>
-      <p>{{ user.email }}</p>
-      <label class="default-label">Admin</label>
-      <h4>{{ user.IsAdmin ?'Yes':'No'}}</h4>
+      {{ include('user/user.html.twig') }}
+
       <div class="col">
         <form action="{{ path('app_user_votes', { id: user.id }) }}" method="post">
           <div>

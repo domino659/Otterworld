@@ -8,12 +8,12 @@
     <ul>
       <li><a class="active" href="{{ path('index') }}"><h4>Home</h4></a></li>
       {% if is_granted('ROLE_USER') %}
-        <li><a href="{{ path('app_post_new') }}"><h4>Create Post</h4></a></li>
-        <li><a href="{{ path('admin_post_index') }}"><h4>Posts</h4></a></li>
+        <li><a href="{{ path('post_index') }}"><h4>Posts</h4></a></li>
         {% if is_granted('ROLE_ADMIN') %}
-          <li><a href="{{ path('admin_user_index') }}"><h4>Users</h4></a></li>
-          <li><a href="{{ path('admin_question_index') }}"><h4>Questions</h4></a></li>
+          <li><a href="{{ path('user_index') }}"><h4>Users</h4></a></li>
+          <li><a href="{{ path('question_index') }}"><h4>Questions</h4></a></li>
         {% endif %}   
+        <li><a href="{{ path('app_post_new') }}"><h4>Create Post</h4></a></li>
       {% else %}
         <li><a href="{{ path('homepage') }}"><h4>If you don't know what to do you can go back and see the Otter!</h4></a></li>
       {% endif %}

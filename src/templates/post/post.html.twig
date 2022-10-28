@@ -9,7 +9,11 @@
     <h3>{{ post.title }}</h3>
   {% endif %}
   <label class="default-label">Autor</label>
-  <p>{{ post.user.username }}</p>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a class="minor_link" href="{{ path('app_user_show', { email: post.user.email }) }}"><p>{{ post.user.username }}</p></a>
+  {% else %}
+    <h3>{{ post.user.username }}</h3>
+  {% endif %}
   <label class="default-label">Slug</label>
   <p>{{ post.slug }}</p>
   <label class="default-label">Content</label>
@@ -18,15 +22,15 @@
   <p>{{ post.price }} €</p>
   <img src="{{ asset(post.imagePath) }}" class="bd-placeholder-img rounded-circle" width="140" height="140">
   <p>{{ post.createdAt|ago }}</p>
-</div>
-<div>
-{% if app.user.email | default('') == post.user.email %}
-  <a href="{{ path('app_post_update', {'id': post.id}) }}">
-    <button type="button" class="btn btn-light">Update</button>
-  </a>
-  <a href="{{ path('app_post_delete', { id: post.id }) }}">
-    <button type="button" class="btn btn-dark">Delete</button>
-  </a>
-{% endif %}
+  {% if app.user.email | default('') == post.user.email %}
+    <div>
+      <a href="{{ path('app_post_update', {'id': post.id}) }}">
+        <button type="button" class="btn btn-light">Update</button>
+      </a>
+      <a href="{{ path('app_post_delete', { id: post.id }) }}">
+        <button type="button" class="btn btn-dark">Delete</button>
+      </a>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}

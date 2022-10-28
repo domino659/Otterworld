@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  question_index
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
@@ -12,46 +8,22 @@
   <div class="default-container">
     <form action="{{ path('search_question') }}">
       <div class="flex">
-        <input type="search" class="form-control form-control-dark" name="q" placeholder="Search" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
-        <a href="{{ path('admin_question_index') }}" class="btn btn-dark">Reset</a></li>
+        <input type="search" class="form-control form-control-dark" name="q" placeholder="Search by title" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
+        <a href="{{ path('question_index') }}" class="btn btn-dark">Reset</a></li>
         <button type="submit" class="btn btn-light">Search</button>
       </div>
     </form>
     <div class="box">
       {% if app.request.query.get('q')  %}
         {% for question in search_question | default('') %}
-          <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ question.id }}</h4> #}
-            <label class="default-label">Title</label>
-            <h3>{{ question.title }}</h3>
-            <label class="default-label">Post</label>
-            <a class="minor_link" href="{{ path('app_post_show', { id: question.post.id }) }}"><p>{{ question.post.title }}</p></a>
-            <label class="default-label">Autor</label>
-            <p>{{ question.user.username }}</p>
-            <label class="default-label">Content</label>
-            <p>{{ question.content }}</p>
-            <p>{{ question.createdAt|ago }}</p>
-          </div>
+          {{ include('question/question.html.twig') }}
         {% endfor %}
       {% endif %}
 
       {% if (search_question is not defined) %}
         <h3>{{ pagination.getTotalItemCount | default(0) }} Total Question(s)</h3>
         {% for question in pagination | default('') %}
-          <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ question.id }}</h4> #}
-            <label class="default-label">Title</label>
-            <h3>{{ question.title }}</h3>
-            <label class="default-label">Post</label>
-            <a class="minor_link" href="{{ path('app_post_show', { id: question.post.id }) }}"><p>{{ question.post.title }}</p></a>
-            <label class="default-label">Autor</label>
-            <p>{{ question.user.username }}</p>
-            <label class="default-label">Content</label>
-            <p>{{ question.content }}</p>
-            <p>{{ question.createdAt|ago }}</p>
-          </div>
+          {{ include('question/question.html.twig') }}
         {% endfor %}
         {{ knp_pagination_render(pagination) }}
       {% endif %}

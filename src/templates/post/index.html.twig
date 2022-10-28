@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  post_index
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
@@ -12,8 +8,8 @@
   <div class="default-container">
     <form action="{{ path('search_post') }}">
       <div class="flex">
-        <input type="search" class="form-control form-control-dark" name="p" placeholder="Search" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
-        <a href="{{ path('admin_post_index') }}" class="btn btn-dark">Reset</a></li>
+        <input type="search" class="form-control form-control-dark" name="p" placeholder="Search by title" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
+        <a href="{{ path('post_index') }}" class="btn btn-dark">Reset</a></li>
         <button type="submit" class="btn btn-light">Search</button>
       </div>
     </form>
@@ -21,20 +17,7 @@
       {% if app.request.query.get('p')  %}
         {% for post in search_post | default('') %}
           <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ post.id }}</h4> #}
-            <label class="default-label">Title</label>
-            <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
-            <label class="default-label">Autor</label>
-            <p>{{ post.user.username }}</p>
-            <label class="default-label">Slug</label>
-            <p>{{ post.slug }}</p>
-            <label class="default-label">Content</label>
-            <p>{{ post.content }}</p>
-            <label class="default-label">Price</label>
-            <p>{{ post.price }} €</p>
-            <img src="{{ asset(post.imagePath) }}" class="bd-placeholder-img rounded-circle" width="140" height="140">
-            <p>{{ post.createdAt|ago }}</p>
+            {{ include('post/post.html.twig') }}
           </div>
         {% endfor %}
       {% endif %}
@@ -42,23 +25,8 @@
       {% if (search_post is not defined) %}
         <h3>{{ pagination.getTotalItemCount | default(0) }} Total Post(s)</h3>
         {% for post in pagination | default('') %}
-          <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ post.id }}</h4> #}
-            <label class="default-label">Title</label>
-            <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
-            <label class="default-label">Autor</label>
-            <p>{{ post.user.username }}</p>
-            <label class="default-label">Slug</label>
-            <p>{{ post.slug }}</p>
-            <label class="default-label">Content</label>
-            <p>{{ post.content }}</p>
-            <label class="default-label">Price</label>
-            <p>{{ post.price }} €</p>
-            <img src="{{ asset(post.imagePath) }}" class="bd-placeholder-img rounded-circle" width="140" height="140">
-            <p>{{ post.createdAt|ago }}</p>
-          </div>
-        {% endfor %}
+    {{ include('post/post.html.twig') }}
+      {% endfor %}
       {{ knp_pagination_render(pagination) }}
     {% endif %}
     </div>
