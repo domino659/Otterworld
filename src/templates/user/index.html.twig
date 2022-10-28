@@ -20,40 +20,14 @@
     <div class="box">
       {% if app.request.query.get('u')  %}
         {% for user in search_user | default('') %}
-          <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ user.id }}</h4> #}
-            <label class="default-label">Username</label>
-            {% if is_granted("USER_VIEW", user) %}
-              <a class="minor_link" href="{{ path('app_user_show', { email: user.email }) }}"><h3>{{ user.username }}</h3></a>
-            {% else %}
-              <h3>{{ user.username }}</h3>
-            {% endif %}
-            <label class="default-label">Email</label>
-            <p>{{ user.email }}</p>
-            <label class="default-label">Admin</label>
-            <p>{{ user.IsAdmin ?'Yes':'No'}}</p>
-          </div>
+          {{ include('components/navbar.html.twig') }}
         {% endfor %}
       {% endif %}
 
       {% if (search_user is not defined) %}
         <h3>{{ pagination.getTotalItemCount | default(0) }} Total User(s)</h3>
         {% for user in pagination | default('') %}
-          <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ user.id }}</h4> #}
-            <label class="default-label">Username</label>
-            {% if is_granted("USER_VIEW", user) %}
-              <a class="minor_link" href="{{ path('app_user_show', { email: user.email }) }}"><h3>{{ user.username }}</h3></a>
-            {% else %}
-              <h3>{{ user.username }}</h3>
-            {% endif %}
-            <label class="default-label">Email</label>
-            <p>{{ user.email }}</p>
-            <label class="default-label">Admin</label>
-            <p>{{ user.IsAdmin ?'Yes':'No'}}</p>
-          </div>
+          {{ include('components/navbar.html.twig') }}
         {% endfor %}
         {{ knp_pagination_render(pagination) }}
       {% endif %}

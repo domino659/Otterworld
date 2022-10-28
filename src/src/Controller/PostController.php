@@ -11,8 +11,8 @@ use Knp\Component\Pager\PaginatorInterface;
 
 use App\Entity\Post;
 use App\Repository\PostRepository;
-use App\Form\PostNewType;
-use App\Form\PostUpdateType;
+use App\Form\PostType;
+use App\Service\UploadHelper;
 
 class PostController extends AbstractController
 {
@@ -45,19 +45,26 @@ class PostController extends AbstractController
    * @Route("/post/new", name="app_post_new")
    */
   public function new(Request $request,
-                      EntityManagerInterface $em): Response
+                      EntityManagerInterface $em,
+                      UploadHelper $helper): Response
   {
     $post = new Post();
-    $form = $this->createForm(PostNewType::class, $post);
+    $form = $this->createForm(PostType::class, $post);
     $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
-        $post->setUser($this->getUser())
-             ->setCreatedAt(new \DateTime())
-             ->setUpdatedAt(new \DateTime());
-        $em->persist($post);
-        $em->flush();
-      
-        return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    if ($form->isSubmitted() && $form->isValid()) {      
+      $post->setUser($this->getUser())
+      ->setCreatedAt(new \DateTime())
+      ->setUpdatedAt(new \DateTime());
+      $newImage = $form['imageFile']->getData();
+      if ($newImage) {
+        $fileName = $helper->uploadPostImage($newImage);
+        $post->setImageFilename($fileName);
+      }
+
+      $em->persist($post);
+      $em->flush();
+    
+      return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
     }
     return $this->render('post/new.html.twig', [
       'postForm' => $form->createView(),
@@ -74,13 +81,22 @@ class PostController extends AbstractController
   public function update(int $id,
                          Post $post,
                          EntityManagerInterface $em,
-                         Request $request): Response
+                         Request $request,
+                         UploadHelper $helper): Response
   {
     $post =  $em->getRepository(Post::class)->findOneBy(['id' => $id]);
-    $form = $this->createForm(PostUpdateType::class, $post);
+    $form = $this->createForm(PostType::class, $post);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {
+      /** @var $port Post */
+      $data = $form->getData();      
+      $newImage = $form['imageFile']->getData();
+      if ($newImage) {
+        $fileName = $helper->uploadPostImage($newImage);
+        $post->setImageFilename($fileName);
+      }
+
       $em->flush();
 
       return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
@@ -117,4 +133,5 @@ class PostController extends AbstractController
     ]);
   }
 }
+
 

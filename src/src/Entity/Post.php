@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+use App\Service\UploadHelper;
+
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
 {
@@ -44,6 +46,9 @@ class Post
     #[ORM\OneToMany(mappedBy: 'post', targetEntity: Question::class, cascade: ["all"])]
 
     private Collection $questions;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $imageFilename = null;
 
     public function __construct()
     {
@@ -102,12 +107,31 @@ class Post
     {
         return $this->price;
     }
-
+    
     public function setPrice(float $price): self
     {
         $this->price = $price;
+        
+        return $this;
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(?string $imageFilename): self
+    {
+        $this->imageFilename = $imageFilename;
 
         return $this;
+    }
+
+    public function getImagePath()
+    {
+        return $this->getImageFilename() === null ?
+            UploadHelper::DEFAULT_IMAGE :
+            UploadHelper::POST_IMAGE . '/' . $this->getImageFilename();
     }
 
     public function getUser(): ?User

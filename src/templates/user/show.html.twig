@@ -42,16 +42,8 @@
     <div>
       <h2>{{ user.posts|length }} Post(s):</h2>
       <ul>
-        {% for post in user.posts %}
-          <div class="card">
-            {# <label class="default-label">Id</label>
-            <h4>{{ post.id }}</h4> #}
-            <label class="default-label">Titre</label>
-            <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
-            <label class="default-label">Content</label>
-            <p>{{ post.content }}</p>
-            <p>{{ post.createdAt|ago }}</p>
-          </div>
+        {% for post in user.posts|reverse %}
+          {{ include('post/post.html.twig') }}
         {% endfor %}
     </div>
   </div>

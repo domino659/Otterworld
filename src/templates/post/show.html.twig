@@ -10,36 +10,11 @@
   </div>
   
   <div class="default-container">
-    <div class="card">
-      {# <label class="default-label">Id</label>
-      <h4>{{ post.id }}</h4> #}
-      <label class="default-label">Title</label>
-      <h3>{{ post.title }}</h3>
-      <label class="default-label">Autor</label>
-      <p>{{ post.user.username }}</p>
-      <label class="default-label">Slug</label>
-      <p>{{ post.slug }}</p>
-      <label class="default-label">Content</label>
-      <p>{{ post.content }}</p>
-      <label class="default-label">Price</label>
-      <p>{{ post.price }} €</p>
-      <p>{{ post.createdAt|ago }}</p>
-    </div>
-    <div>
-    {% if app.user.email == post.user.email %}
-      <a href="{{ path('app_post_update', {'id': post.id}) }}">
-        <button type="button" class="btn btn-light">Update</button>
-      </a>
-      <a href="{{ path('app_post_delete', { id: post.id }) }}">
-        <button type="button" class="btn btn-dark">Delete</button>
-      </a>
-    {% endif %}
-    </div>
-
+    {{ include('post/post.html.twig') }}  
     <div>
       <h2>{{ post.questions|length }} Question(s):</h2>
       <ul>
-        {% for question in post.questions %}
+        {% for question in post.questions|reverse %}
           <div class="card">
             {# <label class="default-label">Id</label>
             <h4>{{ question.id }}</h4> #}

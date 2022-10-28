@@ -12,8 +12,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
 use App\Repository\PostRepository;
-use App\Form\QuestionNewType;
-use App\Form\QuestionUpdateType;
+use App\Form\QuestionType;
 
 class QuestionController extends AbstractController
 {
@@ -51,7 +50,7 @@ class QuestionController extends AbstractController
   {
     $post = $postRepository->findPostById($id);
     $question = new Question();
-    $form = $this->createForm(QuestionNewType::class, $question);
+    $form = $this->createForm(QuestionType::class, $question);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       $question->setUser($this->getUser())
@@ -81,7 +80,7 @@ class QuestionController extends AbstractController
                          Request $request): Response
   {
     $question =  $em->getRepository(Question::class)->findOneBy(['id' => $id]);
-    $form = $this->createForm(QuestionUpdateType::class, $question);
+    $form = $this->createForm(QuestionType::class, $question);
     $form->handleRequest($request);
 
     if ($form->isSubmitted() && $form->isValid()) {

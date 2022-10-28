@@ -15,8 +15,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\AppAuthentificator;
-use App\Form\UserNewType;
-use App\Form\UserUpdateType;
+use App\Form\UserType;
 
 class UserController extends AbstractController
 {
@@ -55,7 +54,7 @@ class UserController extends AbstractController
                       UserAuthenticatorInterface $authenticator,
                       AppAuthentificator $appAuthenticator): Response
     {
-      $form = $this->createForm(UserNewType::class);
+      $form = $this->createForm(UserType::class);
 
       $form->handleRequest($request);
       if ($form->isSubmitted() && $form->isValid()) {
@@ -87,7 +86,7 @@ class UserController extends AbstractController
                         UserPasswordHasherInterface $hasher,
                         Request $request): Response
   {
-    $form = $this->createForm(UserUpdateType::class);
+    $form = $this->createForm(UserType::class);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var $user User */

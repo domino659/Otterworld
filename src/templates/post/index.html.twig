@@ -33,6 +33,7 @@
             <p>{{ post.content }}</p>
             <label class="default-label">Price</label>
             <p>{{ post.price }} €</p>
+            <img src="{{ asset(post.imagePath) }}" class="bd-placeholder-img rounded-circle" width="140" height="140">
             <p>{{ post.createdAt|ago }}</p>
           </div>
         {% endfor %}
@@ -54,6 +55,7 @@
             <p>{{ post.content }}</p>
             <label class="default-label">Price</label>
             <p>{{ post.price }} €</p>
+            <img src="{{ asset(post.imagePath) }}" class="bd-placeholder-img rounded-circle" width="140" height="140">
             <p>{{ post.createdAt|ago }}</p>
           </div>
         {% endfor %}
