@@ -16,6 +16,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\AppAuthentificator;
 use App\Form\UserType;
+use App\Form\UserModifyType;
 
 class UserController extends AbstractController
 {
@@ -73,7 +74,6 @@ class UserController extends AbstractController
       ]);	
     }
   
-  // TODO Add update by specific value and not update everithing will correct duplicate email error
   /**
    * @param User $user
    * @param EntityManagerInterface $em
@@ -89,16 +89,21 @@ class UserController extends AbstractController
                         Request $request): Response
   {
     $user =  $em->getRepository(User::class)->findOneBy(['email' => $email]);
-    $form = $this->createForm(UserType::class);
+    $form = $this->createForm(UserModifyType::class);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var $user User */
       $data = $form->getData();
-      $plainPassword = $form['password']->getData();
       $user->setEmail($form['email']->getData())
-           ->setUsername($form['username']->getData())
-           ->setPassword($hasher->hashPassword($user, $form['password']->getData()))
-           ->setUpdatedAt(new \DateTime());
+      ->setUsername($form['username']->getData())
+      ->setUpdatedAt(new \DateTime());
+      
+      // Process Password if not empty
+      $plainPassword = $form['password']->getData();
+      if (!is_null($plainPassword)) {
+        $user->setPassword($hasher->hashPassword($user, $form['password']->getData()));
+      }
+
       $em->flush();
       
       return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);

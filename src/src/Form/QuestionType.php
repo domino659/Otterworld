@@ -14,7 +14,6 @@ class QuestionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title')
             ->add('content', TextType::class)
             ->add('Send', SubmitType::class)
         ;

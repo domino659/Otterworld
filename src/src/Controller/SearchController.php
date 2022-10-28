@@ -45,7 +45,7 @@ class SearchController extends AbstractController
     public function search_question(QuestionRepository $questionRepository, Request $request): Response
     {
         $search = $request->query->get('q');
-        $questions = $questionRepository->searchByTitle($search);
+        $questions = $questionRepository->searchByContent($search);
         
         return $this->render('question/index.html.twig', [
             'search_question' => $questions,

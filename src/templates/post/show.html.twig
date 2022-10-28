@@ -14,9 +14,13 @@
           {{ include('question/question.html.twig') }}
         {% endfor %}
       </ul>
-      <a href="{{ path('app_question_new', { id: post.id }) }}">
-        <button type="button" class="btn btn-light">Answer</button>
-      </a>
+      <br>
+      <h2>Answer</h2>
+      {{ form_start(questionForm) }}
+        {{ form_widget(questionForm) }}
+      {{ form_end(questionForm) }}
+
+  </div>
     </div>  
   </div>
   

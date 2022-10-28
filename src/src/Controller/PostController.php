@@ -12,8 +12,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 use App\Entity\User;
 use App\Entity\Post;
+use App\Entity\Question;
 use App\Repository\PostRepository;
 use App\Form\PostType;
+use App\Form\QuestionType;
 use App\Service\UploadHelper;
 
 class PostController extends AbstractController
@@ -126,10 +128,29 @@ class PostController extends AbstractController
    * @return Response
    * @Route("app/post/{id}", name="app_post_show")
    */
-  public function show(Post $post): Response
+  public function show(int $id,
+                       Post $post,
+                       Request $request,
+                       EntityManagerInterface $em,
+                       PostRepository $postRepository): Response
   {
+    $post = $postRepository->findPostById($id);
+    $question = new Question();
+    $form = $this->createForm(QuestionType::class, $question);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+      $question->setUser($this->getUser())
+               ->setPost($post)
+               ->setCreatedAt(new \DateTime())
+               ->setUpdatedAt(new \DateTime());
+      $em->persist($question);
+      $em->flush();
+      
+      return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    }
     return $this->render('post/show.html.twig', [
       'post' => $post,
+      'questionForm' => $form->createView(),
     ]);
   }
 }

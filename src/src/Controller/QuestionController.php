@@ -44,7 +44,8 @@ class QuestionController extends AbstractController
    * @return Response
    * @Route("post/question/{id}/new", name="app_question_new")
    */
-  public function new(int $id, Request $request,
+  public function new(int $id,
+                      Request $request,
                       EntityManagerInterface $em,
                       PostRepository $postRepository): Response
   {

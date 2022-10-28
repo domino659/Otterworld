@@ -43,10 +43,10 @@ class QuestionRepository extends ServiceEntityRepository
      * @param $value
      * @return int|mixed|string
      */
-    public function searchByTitle($value)
+    public function searchByContent($value)
     {
         return $this->createQueryBuilder('q')
-            ->andWhere('q.title LIKE :val')
+            ->andWhere('q.content LIKE :val')
             ->setParameter('val', '%'.$value.'%')
             ->getQuery()
             ->getResult()
@@ -56,7 +56,7 @@ class QuestionRepository extends ServiceEntityRepository
     public function findAllAskedQuestionByCreatedAtOrderPaginate()
     {
         $queryBuilder = $this->createQueryBuilder('q')
-            ->andWhere('q.title IS NOT NULL')
+            ->andWhere('q.content IS NOT NULL')
             ->orderBy('q.createdAt', 'DESC');
         return $queryBuilder;    
     }

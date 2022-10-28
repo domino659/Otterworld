@@ -51,6 +51,9 @@ class UserVoter extends Voter
                 if( $user == $subject ) {
                     return true;
                 }
+                if ($this->security->isGranted('ROLE_ADMIN')) {
+                    return true;
+                }
                 break;
             case self::DELETE:
                 if( $user == $subject ) {
