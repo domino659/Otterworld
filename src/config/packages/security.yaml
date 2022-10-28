@@ -52,6 +52,7 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/app, roles: ROLE_USER }
         - { path: ^/api, roles: ROLE_API }
+        - { path: ^/law, roles: PUBLIC_ACCESS }
         - { path: ^/index, roles: PUBLIC_ACCESS }
 
 when@test:

@@ -21,26 +21,34 @@ class IndexController extends AbstractController
     {
         return $this->render('index/homepage.html.twig');
     }
-
+    
     /**
      * @param EntytyManagerInterface $em
      * @return Response
      * @Route("/index", name="index")
      */
     public function index(PostRepository $postRepository,
-                         Request $request,
-                         PaginatorInterface $paginator): Response
-                         {
+    Request $request,
+    PaginatorInterface $paginator): Response
+    {
         $search = $request->query->get('p');
         $posts = $postRepository->findAllAskedPostByCreatedAtOrderPaginate();
         $pagination = $paginator->paginate(
-        $posts,
-        $request->query->getInt('page', 1),
-        5
+            $posts,
+            $request->query->getInt('page', 1),
+            5
         );
-
+        
         return $this->render('index/index.html.twig', [
-        'pagination' => $pagination
+            'pagination' => $pagination
         ]);
+    }
+
+    /**
+     * @Route("/law", name="law")
+     */
+    public function law(): Response
+    {
+        return $this->render('index/law.html.twig');
     }
 }

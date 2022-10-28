@@ -23,6 +23,7 @@
           <li><a href="{{ path('app_user_show', { email: app.user.email }) }}"><h4>{{ app.user.username }}</h4></a></li>
           <li><a id="avatarLink" href="{{ path('app_user_show', { email: app.user.email }) }}"><img class="avatar" src="{{ asset('images/otter_profile.jpg') }}"/></a></li>
         {% else %}
+          <li><a href="{{ path('law') }}"><h4>Mentions Légales</h4></a></li>
           <li><a href="{{ path('login') }}"><h4>Login</h4></a></li>
           <li><a href="{{ path('app_user_new') }}"><h4>Sign-in</h4></a></li>
         {% endif %}
