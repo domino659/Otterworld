@@ -32,7 +32,7 @@ class SearchController extends AbstractController
     public function search_post(PostRepository $postRepository, Request $request): Response
     {
         $search = $request->query->get('p');
-        $posts = $postRepository->searchByTitle($search);
+        $posts = $postRepository->searchBySlug($search);
         
         return $this->render('post/index.html.twig', [
             'search_post' => $posts,

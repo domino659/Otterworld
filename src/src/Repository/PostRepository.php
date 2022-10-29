@@ -53,10 +53,10 @@ class PostRepository extends ServiceEntityRepository
      * @param $value
      * @return int|mixed|string
      */
-    public function searchByTitle($value)
+    public function searchBySlug($value)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.title LIKE :val')
+            ->andWhere('p.slug LIKE :val')
             ->setParameter('val', '%'.$value.'%')
             ->getQuery()
             ->getResult()
