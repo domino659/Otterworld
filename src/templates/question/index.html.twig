@@ -8,7 +8,7 @@
   <div class="default-container">
     <form action="{{ path('search_question') }}">
       <div class="flex">
-        <input type="search" class="form-control form-control-dark" name="q" placeholder="Search by title" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
+        <input type="search" class="form-control form-control-dark" name="q" placeholder="Search by content" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
         <a href="{{ path('question_index') }}" class="btn btn-dark">Reset</a></li>
         <button type="submit" class="btn btn-light">Search</button>
       </div>

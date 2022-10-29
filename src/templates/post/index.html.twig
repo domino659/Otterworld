@@ -16,17 +16,15 @@
     <div class="box">
       {% if app.request.query.get('p')  %}
         {% for post in search_post | default('') %}
-          <div class="card">
-            {{ include('post/post.html.twig') }}
-          </div>
+          {{ include('post/post.html.twig') }}
         {% endfor %}
       {% endif %}
 
       {% if (search_post is not defined) %}
         <h3>{{ pagination.getTotalItemCount | default(0) }} Total Post(s)</h3>
         {% for post in pagination | default('') %}
-    {{ include('post/post.html.twig') }}
-      {% endfor %}
+          {{ include('post/post.html.twig') }}
+        {% endfor %}
       {{ knp_pagination_render(pagination) }}
     {% endif %}
     </div>

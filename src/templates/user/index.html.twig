@@ -27,7 +27,8 @@
         {% for user in pagination | default('') %}
           <div class="card">
             {{ include('user/user.html.twig') }}
-          </div>        {% endfor %}
+          </div>        
+        {% endfor %}
         {{ knp_pagination_render(pagination) }}
       {% endif %}
     </div>

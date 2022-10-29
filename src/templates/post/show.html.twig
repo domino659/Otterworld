@@ -9,18 +9,15 @@
     {{ include('post/post.html.twig') }}
     <div>
       <h2>{{ post.questions|length }} Question(s):</h2>
+      <h2>Answer</h2>
+      {{ form_start(questionForm) }}
+        {{ form_widget(questionForm) }}
+      {{ form_end(questionForm) }}
       <ul>
         {% for question in post.questions|reverse %}
           {{ include('question/question.html.twig') }}
         {% endfor %}
       </ul>
-      <br>
-      <h2>Answer</h2>
-      {{ form_start(questionForm) }}
-        {{ form_widget(questionForm) }}
-      {{ form_end(questionForm) }}
-
-  </div>
     </div>  
   </div>
   
