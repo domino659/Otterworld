@@ -1,23 +1,32 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  question_index
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
   </div>
   
   <div class="default-container">
-    {% for question in questions %}
-      <div class="card">
-        <p>{{ question.id }}</p>
-        <a class="minor_link" href="{{ path('app_post_show', { id: question.post.id }) }}"><h3>{{ question.post.title }}</h3></a>
-        <h4>{{ question.title }}</h4>
-        <p>{{ question.content }}</p>
-        <p>{{ question.createdAt|ago }}</p>
+    <form action="{{ path('search_question') }}">
+      <div class="flex">
+        <input type="search" class="form-control form-control-dark" name="q" placeholder="Search by title" aria-label="Search" value="{{ app.request.query.get('s') | default('') }}">
+        <a href="{{ path('question_index') }}" class="btn btn-dark">Reset</a></li>
+        <button type="submit" class="btn btn-light">Search</button>
       </div>
-    {% endfor %}
+    </form>
+    <div class="box">
+      {% if app.request.query.get('q')  %}
+        {% for question in search_question | default('') %}
+          {{ include('question/question.html.twig') }}
+        {% endfor %}
+      {% endif %}
+
+      {% if (search_question is not defined) %}
+        <h3>{{ pagination.getTotalItemCount | default(0) }} Total Question(s)</h3>
+        {% for question in pagination | default('') %}
+          {{ include('question/question.html.twig') }}
+        {% endfor %}
+        {{ knp_pagination_render(pagination) }}
+      {% endif %}
+    </div>
   </div>
 {% endblock %}

@@ -12,6 +12,30 @@ body {
   color: whitesmoke;
 }
 
+a {
+  text-decoration: none;
+  color: whitesmoke;
+  transition: 0.2s;
+}
+
+.card {
+  background-color: #3e3e3e;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+}
+
+.box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.flex {
+  display: flex;
+}
+
 .default-container {
   width: 70%;
   max-width: 1200px;
@@ -21,10 +45,15 @@ body {
   margin-bottom: 50px;
 }
 
-a {
-  text-decoration: none;
-  color: whitesmoke;
-  transition: 0.2s;
+label {
+  color: #f1c40f;
+}
+
+.default-label {
+  font-size: 12px;
+  /* margin-left: -2px; */
+  margin-bottom: -4px;
+  color: #f1c40f;
 }
 
 a:hover {
@@ -44,25 +73,6 @@ a:hover {
   color: whitesmoke;
   font-weight: bold;
   transition: 0.2s;
-}
-
-
-.card {
-  background-color: #3e3e3e;
-  border-radius: 5px;
-  padding: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 10px;
-}
-
-.box {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.flex {
-  display: flex;
 }
 
 .pagination {

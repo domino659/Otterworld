@@ -15,24 +15,19 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\AppAuthentificator;
-use App\Form\UserNewFormType;
-use App\Form\UserUpdateFormType;
+use App\Form\UserType;
+use App\Form\UserModifyType;
 
 class UserController extends AbstractController
 {
   /**
    * @param UserRepository $userRepository
    * @return Response
-   * @Route("/user", name="admin_user_index")
+   * @Route("/admin/user", name="user_index")
    */
-  public function index(UserRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
-  // {
-  //   $users = $userRepository->findAll();
-
-  //   return $this->render('user/index.html.twig', [
-  //     'users' => $users,
-  //   ]);
-  // }
+  public function index(UserRepository $userRepository,
+                        Request $request,
+                        PaginatorInterface $paginator): Response
   {
     $search = $request->query->get('u');
     $users = $userRepository->findAllAskedUserByAlphabeticalOrderPaginate();
@@ -41,30 +36,18 @@ class UserController extends AbstractController
       $request->query->getInt('page', 1), /*page number*/
       10 /*limit per page*/
     );
-    // dd($pagination);
+
     return $this->render('user/index.html.twig', [
       'pagination' => $pagination
     ]);
 
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
   /**
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/user/sign-in", name="sign_in")
+   * @Route("/app/user/sign-in", name="app_user_new")
    */
   public function new(Request $request,
                       EntityManagerInterface $em,
@@ -72,59 +55,62 @@ class UserController extends AbstractController
                       UserAuthenticatorInterface $authenticator,
                       AppAuthentificator $appAuthenticator): Response
     {
-      $form = $this->createForm(UserNewFormType::class);
+      $form = $this->createForm(UserType::class);
 
       $form->handleRequest($request);
       if ($form->isSubmitted() && $form->isValid()) {
         /** @var $user User */
         $user = $form->getData();
-
         $user->setPassword($hasher->hashPassword($user, $form['password']->getData()))
-        ->setCreatedAt(new \DateTime())
-        ->setUpdatedAt(new \DateTime());
-        
+             ->setCreatedAt(new \DateTime())
+             ->setUpdatedAt(new \DateTime());
         $em->persist($user);
         $em->flush();
         
         return $authenticator->authenticateUser($user, $appAuthenticator, $request);
-        }
-        return $this->render('user/new.html.twig', [
-          'userForm' => $form->createView(),
-        ]);	
+      }
+      return $this->render('user/new.html.twig', [
+        'userForm' => $form->createView(),
+      ]);	
     }
   
-  // TODO Add update by specific value and not update everithing will correct duplicate email error
   /**
    * @param User $user
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/user/{email}/update", name="app_user_update")
+   * @Route("app/user/{email}/update", name="app_user_update")
+   * @IsGranted("USER_EDIT", subject="user")
    */
-  public function update(User $user,
+  public function update(string $email,
+                        User $user,
                         EntityManagerInterface $em,
                         UserPasswordHasherInterface $hasher,
                         Request $request): Response
   {
-    $form = $this->createForm(UserUpdateFormType::class);
-    
+    $user =  $em->getRepository(User::class)->findOneBy(['email' => $email]);
+    $form = $this->createForm(UserModifyType::class);
     $form->handleRequest($request);
     if ($form->isSubmitted() && $form->isValid()) {
       /** @var $user User */
       $data = $form->getData();
-
-      $plainPassword = $form['password']->getData();
       $user->setEmail($form['email']->getData())
-           ->setUsername($form['username']->getData())
-           ->setPassword($hasher->hashPassword($user, $form['password']->getData()))
-           ->setUpdatedAt(new \DateTime());
-           
+      ->setUsername($form['username']->getData())
+      ->setUpdatedAt(new \DateTime());
+      
+      // Process Password if not empty
+      $plainPassword = $form['password']->getData();
+      if (!is_null($plainPassword)) {
+        $user->setPassword($hasher->hashPassword($user, $form['password']->getData()));
+      }
+
       $em->flush();
       
       return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
       }
     return $this->render('user/update.html.twig', [
       'userForm' => $form->createView(),
+      'user' => $user,
     ]);	
   }
   
@@ -132,7 +118,8 @@ class UserController extends AbstractController
    * @param User $user
    * @param EntityManagerInterface $em
    * @return Response
-   * @Route("/user/{email}/delete", name="app_user_delete")
+   * @Route("/app/user/{email}/delete", name="app_user_delete")
+   * @IsGranted("USER_DELETE", subject="user")
    */
   public function delete(User $user, EntityManagerInterface $em): Response
   {
@@ -145,19 +132,17 @@ class UserController extends AbstractController
   /**
    * @param User $user
    * @return Response
-   * @Route("/user/{email}", name="app_user_show")*
+   * @Route("/app/user/{email}", name="app_user_show")*
    * @IsGranted("USER_VIEW", subject="user")
    */
   public function show(User $user) : Response
   {
-    // $this->denyAccessUnlessGranted('USER_VIEW', $user);
-
     return $this->render('user/show.html.twig', [
       'user' => $user,
     ]);
   }
 
-  /** @Route("/users/{id}/votes", name="app_user_votes", methods="POST")
+  /** @Route("/app/users/{id}/votes", name="app_user_votes", methods="POST")
    * @return Response
    */
   public function userVotes(User $user, Request $request, EntityManagerInterface $em): Response

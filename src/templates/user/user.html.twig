@@ -1,0 +1,12 @@
+{% block body %}
+  {# <label class="default-label">Id</label>
+  <h4>{{ user.id }}</h4> #}
+  <label class="default-label">Username</label>
+  {% if is_granted('ROLE_ADMIN') %}
+    <a class="minor_link" href="{{ path('app_user_show', { email: user.email }) }}"><h3>{{ user.username }}</h3></a>
+  {% else %}
+    <h3>{{ user.username }}</h3>
+  {% endif %}
+  <label class="default-label">Email</label>
+  <p>{{ user.email }}</p>
+{% endblock %}

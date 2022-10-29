@@ -1,36 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  post_show
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
   </div>
   
   <div class="default-container">
-    <div class="card">
-      <h4>{{ post.id }}</h4>
-      <h3>{{ post.title }}</h3>
-      <p>{{ post.slug }}</p>
-      <p>{{ post.content }}</p>
-      <p>{{ post.price }}</p>
-      <p>{{ post.createdAt|ago }}</p>
-    </div>
-
-
+    {{ include('post/post.html.twig') }}
     <div>
       <h2>{{ post.questions|length }} Question(s):</h2>
       <ul>
-        {% for question in post.questions %}
-          <div class="card">
-            <p>{{ question.id }}</p>
-            <p>{{ question.title }}</p>
-            <p>{{ question.content }}</p>
-            <p>{{ question.createdAt|ago }}</p>
-          </div>
+        {% for question in post.questions|reverse %}
+          {{ include('question/question.html.twig') }}
         {% endfor %}
+      </ul>
+      <br>
+      <h2>Answer</h2>
+      {{ form_start(questionForm) }}
+        {{ form_widget(questionForm) }}
+      {{ form_end(questionForm) }}
+
+  </div>
     </div>  
   </div>
   

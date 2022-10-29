@@ -5,13 +5,14 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
-        user:
+        app_user:
             entity:
                 class: App\Entity\User
                 property: email
     role_hierarchy:
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN_USER, ROLE_ADMIN_POST, ROLE_ADMIN_POST, ROLE_ALLOWED_TO_SWITCH]
-        ROLE_EDITOR: [ROLE_ADMIN_POST, ROLE_ADMIN_POST]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN: [ROLE_USER, ROLE_API]
+        ROLE_USER: [ROLE_USER]
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -19,13 +20,13 @@ security:
         api:
             pattern: ^/api
             stateless: true
-            provider: user
+            provider: app_user
             custom_authenticator:
                 - App\Security\ApiAuthenticator
         main:
             entry_point: App\Security\AppAuthentificator
             lazy: true
-            provider: user
+            provider: app_user
             custom_authenticator:
                 - App\Security\AppAuthentificator
                 - App\Security\ApiAuthenticator
@@ -46,9 +47,13 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin, roles: ROLE_SUPER_ADMIN }
-        - { path: ^/api, roles: ROLE_USER }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/app/user/sign-in, roles: PUBLIC_ACCESS }
+        - { path: ^/app/user/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/app, roles: ROLE_USER }
+        - { path: ^/api, roles: ROLE_API }
+        - { path: ^/law, roles: PUBLIC_ACCESS }
+        - { path: ^/index, roles: PUBLIC_ACCESS }
 
 when@test:
     security:

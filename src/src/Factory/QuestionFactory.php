@@ -39,8 +39,6 @@ final class QuestionFactory extends ModelFactory
     protected function getDefaults(): array
     {
         return [
-            // TODO add your default values here (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories)
-            'title' => self::faker()->userName(),
             'content' => self::faker()->text(),
             'createdAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
             'updatedAt' => self::faker()->dateTimeBetween('-50 days', '-1 second')

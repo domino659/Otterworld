@@ -39,6 +39,38 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
+    public function findPostById($value): ?Post
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @param $value
+     * @return int|mixed|string
+     */
+    public function searchBySlug($value)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.slug LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findAllAskedPostByCreatedAtOrderPaginate()
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+            ->andWhere('p.title IS NOT NULL')
+            ->orderBy('p.createdAt', 'DESC');
+        return $queryBuilder;    
+    }
+
 //    /**
 //     * @return Post[] Returns an array of Post objects
 //     */
@@ -51,16 +83,6 @@ class PostRepository extends ServiceEntityRepository
 //            ->setMaxResults(10)
 //            ->getQuery()
 //            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Post
-//    {
-//        return $this->createQueryBuilder('n')
-//            ->andWhere('n.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
 //        ;
 //    }
 }

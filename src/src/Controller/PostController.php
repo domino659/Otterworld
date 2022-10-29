@@ -7,67 +7,152 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+use App\Entity\User;
 use App\Entity\Post;
+use App\Entity\Question;
 use App\Repository\PostRepository;
+use App\Form\PostType;
+use App\Form\QuestionType;
+use App\Service\UploadHelper;
 
 class PostController extends AbstractController
 {
   /**
    * @param EntytyManagerInterface $em
    * @return Response
-   * @Route("/post", name="admin_post_index")
+   * @Route("app/post", name="post_index")
    */
-  public function index(PostRepository $postRepository): Response
+  public function index(PostRepository $postRepository,
+                        Request $request,
+                        PaginatorInterface $paginator): Response
   {
-    $posts = $postRepository->findAll();
+    $search = $request->query->get('p');
+    $posts = $postRepository->findAllAskedPostByCreatedAtOrderPaginate();
+    $pagination = $paginator->paginate(
+      $posts,
+      $request->query->getInt('page', 1),
+      10
+    );
+
     return $this->render('post/index.html.twig', [
-      'posts' => $posts,
+      'pagination' => $pagination
     ]);
   }
 
-    /**
-   * @param Post $post
-   * @return Response
-   * @Route("/post/{id}", name="app_post_show")
-   */
-  public function show(Post $post) : Response
-  {
-    return $this->render('post/show.html.twig', [
-      'post' => $post,
-    ]);
-  }
-  
   /**
-   * @return Response
-   * @Route("/user/new", name="sign_in")
-   */
-  public function new(): Response
-  {
-    return $this->render('post/new.html.twig');
-  }
-  
-    /**
    * @param EntityManagerInterface $em
    * @param Request $request
    * @return Response
-   * @Route("/user/create", name="app_user_create", methods="POST")
+   * @Route("app/post/new", name="app_post_new")
    */
-  public function create(EntityManagerInterface $em, Request $request, UserPasswordHasherInterface $hasher): Response
+  public function new(Request $request,
+                      EntityManagerInterface $em,
+                      UploadHelper $helper): Response
   {
-    $loggedUser = $this->getUser();
-
-    $post = new User();
-    $user->setUsername($request->request->get('username'))
-      ->setEmail($request->request->get('email'))
-      ->setPassword($hasher->hashPassword($user, 'password'))
-      ->setIsAdmin(false)
+    $post = new Post();
+    $form = $this->createForm(PostType::class, $post);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {      
+      $post->setUser($this->getUser())
       ->setCreatedAt(new \DateTime())
       ->setUpdatedAt(new \DateTime());
+      $newImage = $form['imageFile']->getData();
+      if ($newImage) {
+        $fileName = $helper->uploadPostImage($newImage);
+        $post->setImageFilename($fileName);
+      }
+      $em->persist($post);
+      $em->flush();
+    
+      return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    }
+    return $this->render('post/new.html.twig', [
+      'postForm' => $form->createView(),
+    ]);	
+  }
+  
+  /**
+   * @param Post $post
+   * @param EntityManagerInterface $em
+   * @param Request $request
+   * @return Response
+   * @Route("app/post/{id}/update", name="app_post_update")
+   */
+  public function update(int $id,
+                         Post $post,
+                         EntityManagerInterface $em,
+                         Request $request,
+                         UploadHelper $helper): Response
+  {
+    $post =  $em->getRepository(Post::class)->findOneBy(['id' => $id]);
+    $form = $this->createForm(PostType::class, $post);
+    $form->handleRequest($request);
 
-    $em->persist($user);
+    if ($form->isSubmitted() && $form->isValid()) {
+      /** @var $port Post */
+      $data = $form->getData();      
+      $newImage = $form['imageFile']->getData();
+      if ($newImage) {
+        $fileName = $helper->uploadPostImage($newImage);
+        $post->setImageFilename($fileName);
+      }
+      $em->flush();
+
+      return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    }
+    return $this->render('post/update.html.twig', [
+      'postForm' => $form->createView(),
+      'post' => $post,
+    ]);
+  }
+
+  /**
+   * @param Post $post
+   * @param EntityManagerInterface $em
+   * @return Response
+   * @Route("app/post/{id}/delete", name="app_post_delete")
+   */
+  public function delete(Post $post, EntityManagerInterface $em): Response
+  {
+    $em->remove($post);
     $em->flush();
+    
+    return $this->redirectToRoute('index');
+  }
 
-    return $this->redirectToRoute('app_user_show', ['email' => $user->getEmail()]);
+  /**
+   * @param Post $post
+   * @return Response
+   * @Route("app/post/{id}", name="app_post_show")
+   */
+  public function show(int $id,
+                       Post $post,
+                       Request $request,
+                       EntityManagerInterface $em,
+                       PostRepository $postRepository): Response
+  {
+    $post = $postRepository->findPostById($id);
+    $question = new Question();
+    $form = $this->createForm(QuestionType::class, $question);
+    $form->handleRequest($request);
+    if ($form->isSubmitted() && $form->isValid()) {
+      $question->setUser($this->getUser())
+               ->setPost($post)
+               ->setCreatedAt(new \DateTime())
+               ->setUpdatedAt(new \DateTime());
+      $em->persist($question);
+      $em->flush();
+      
+      return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
+    }
+    return $this->render('post/show.html.twig', [
+      'post' => $post,
+      'questionForm' => $form->createView(),
+    ]);
   }
 }
+
+

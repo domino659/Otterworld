@@ -7,18 +7,25 @@
   <div class="navbar">
     <ul>
       <li><a class="active" href="{{ path('index') }}"><h4>Home</h4></a></li>
-      <li><a href="{{ path('admin_user_index') }}"><h4>Users</h4></a></li>
-      <li><a href="{{ path('admin_post_index') }}"><h4>Posts</h4></a></li>
-      <li><a href="{{ path('admin_question_index') }}"><h4>Questions</h4></a></li>
-      
+      {% if is_granted('ROLE_USER') %}
+        <li><a href="{{ path('post_index') }}"><h4>Posts</h4></a></li>
+        {% if is_granted('ROLE_ADMIN') %}
+          <li><a href="{{ path('user_index') }}"><h4>Users</h4></a></li>
+          <li><a href="{{ path('question_index') }}"><h4>Questions</h4></a></li>
+        {% endif %}   
+        <li><a href="{{ path('app_post_new') }}"><h4>Create Post</h4></a></li>
+      {% else %}
+        <li><a href="{{ path('homepage') }}"><h4>If you don't know what to do you can go back and see the Otter!</h4></a></li>
+      {% endif %}
       <div>
         {% if is_granted('ROLE_USER') %}
           <li><a href="{{ path('app_logout') }}"><h4>Logout</h4></a></li>
           <li><a href="{{ path('app_user_show', { email: app.user.email }) }}"><h4>{{ app.user.username }}</h4></a></li>
-          <li><a id="avatarLink" href="{{ path('app_user_show', { email: app.user.email }) }}"><img class="avatar" src="{{ asset('images/user_profile.jpg') }}"/></a></li>
+          <li><a id="avatarLink" href="{{ path('app_user_show', { email: app.user.email }) }}"><img class="avatar" src="{{ asset('images/otter_profile.jpg') }}"/></a></li>
         {% else %}
+          <li><a href="{{ path('law') }}"><h4>Mentions Légales</h4></a></li>
           <li><a href="{{ path('login') }}"><h4>Login</h4></a></li>
-          <li><a href="{{ path('sign_in') }}"><h4>Sign-in</h4></a></li>
+          <li><a href="{{ path('app_user_new') }}"><h4>Sign-in</h4></a></li>
         {% endif %}
       </div>
     </ul>

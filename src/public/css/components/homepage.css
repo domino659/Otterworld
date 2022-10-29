@@ -55,12 +55,11 @@ img {
 }
 
 .column img {
-  /* margin-top: 8px; */
   vertical-align: middle;
   width: 100%;
-  height: 20%;
+  height: 24%;
   filter: blur(1px) brightness(75%);
-
+  object-fit: cover;
 }
 
 /* Responsive layout - makes a two column-layout instead of four columns */

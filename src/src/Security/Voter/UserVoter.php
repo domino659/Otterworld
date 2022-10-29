@@ -11,8 +11,8 @@ class UserVoter extends Voter
 {
     private Security $security;
 
-    public const EDIT = 'USER_EDIT';
     public const VIEW = 'USER_VIEW';
+    public const EDIT = 'USER_EDIT';
     public const DELETE = 'USER_DELETE';
 
     public function __construct(Security $security)
@@ -31,18 +31,31 @@ class UserVoter extends Voter
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
+        $currentUser = $this->security->getUser();
+        
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
             return false;
         }
-
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case self::EDIT:
-                // logic to determine if the user can EDIT
-                // return true or false
-                break;
             case self::VIEW:
+                if( $user == $subject ) {
+                    return true;
+                }
+                if ($this->security->isGranted('ROLE_ADMIN')) {
+                    return true;
+                }
+                break;
+            case self::EDIT:
+                if( $user == $subject ) {
+                    return true;
+                }
+                if ($this->security->isGranted('ROLE_ADMIN')) {
+                    return true;
+                }
+                break;
+            case self::DELETE:
                 if( $user == $subject ) {
                     return true;
                 }

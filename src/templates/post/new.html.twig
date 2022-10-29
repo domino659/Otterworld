@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+  <div class="default-container">
+    <h2>Post Creation</h2>
+    {{ form_start(postForm) }}
+      {{ form_row(postForm.title) }}
+      {{ form_row(postForm.slug, { 'label': 'Tags'}) }}
+      {{ form_widget(postForm) }}
+    {{ form_end(postForm) }}
+  </div>
+
+{% endblock %}

@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
-class UserUpdateFormType extends AbstractType
+class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -36,7 +36,7 @@ class UserUpdateFormType extends AbstractType
                     ])
                 ]
             ])
-            ->add('Update', SubmitType::class)
+            ->add('Register', SubmitType::class)
         ;
     }
 

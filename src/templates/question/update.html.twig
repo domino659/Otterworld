@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div>
+    {{ include('components/navbar.html.twig') }}
+  </div>
+
+  <div class="default-container">
+    <h2>Update Question</h2>
+    {{ form_start(questionForm) }}
+      {{ form_row(questionForm.content, {attr: { value : question.content } }) }}
+    {{ form_end(questionForm) }}
+  </div>
+{% endblock %}

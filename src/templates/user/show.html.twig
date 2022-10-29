@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  user_show
-{% endblock %}
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
@@ -11,15 +7,16 @@
 
   <div class="default-container">
     <div class="card">
-      <h4>{{ user.id }}</h4>
-      <h1>{{ user.username }}</h1>
-      <p>{{ user.email }}</p>
-      <h4>{{ user.IsAdmin ?'Yes':'No'}}</h4>
+      {{ include('user/user.html.twig') }}
+
       <div class="col">
         <form action="{{ path('app_user_votes', { id: user.id }) }}" method="post">
+          <div>
+          <label class="default-label">Votes:</label>
+          <span class="badge bg-secondary">{{ user.getVotes }}</span>
+          </div>
           <button class="badge bg-success" name="votes" value="up">Vote up</button>
           <button class="badge bg-danger" name="votes" value="down">Vote down</button>
-          <span class="badge bg-secondary">{{ user.getVotes }}</span>
         </form>
       </div>
       <br>
@@ -35,13 +32,8 @@
     <div>
       <h2>{{ user.posts|length }} Post(s):</h2>
       <ul>
-        {% for post in user.posts %}
-          <div class="card">
-            <p>{{ post.id }}</p>
-            <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
-            <p>{{ post.content }}</p>
-            <p>{{ post.createdAt|ago }}</p>
-          </div>
+        {% for post in user.posts|reverse %}
+          {{ include('post/post.html.twig') }}
         {% endfor %}
     </div>
   </div>

@@ -1,17 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-  Index
-{% endblock %}
-
-
 {% block body %}
   <div>
     {{ include('components/navbar.html.twig') }}
   </div>
   <div class="default-container">
-    <br>
+    {# Totally necessary #}
     <h1>Hello World!</h1>
     <img src="{{ asset('images/otter_slide.webp') }}">
+  </div>
+
+  <div class="default-container">
+    <div class="box">
+      <h3>{{ pagination.getTotalItemCount | default(0) }} Total Post(s)</h3>
+      {% for post in pagination | default('') %}
+        {{ include('post/post.html.twig') }}
+      {% endfor %}
+      {{ knp_pagination_render(pagination) }}
+    </div>
   </div>
 {% endblock %}

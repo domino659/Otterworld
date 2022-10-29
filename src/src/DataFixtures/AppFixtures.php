@@ -14,16 +14,22 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        UserFactory::createOne([
+            'username' => 'admin',
+            'roles' => ['ROLE_ADMIN']
+        ]);
+        UserFactory::createOne([
+            'username' => 'user',
+        ]);
         UserFactory::createMany(21);
-        // PostFactory::createMany(10);
-        // QuestionFactory::createMany(10);
         
         PostFactory::createMany(100, function () {
             return ['user' => UserFactory::random()];
         });
 
         QuestionFactory::createMany(200, function () {
-            return ['post' => PostFactory::random()];
+            return ['user' => UserFactory::random(),
+                    'post' => PostFactory::random()];
         });
     }
 }

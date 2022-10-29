@@ -39,6 +39,27 @@ class QuestionRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param $value
+     * @return int|mixed|string
+     */
+    public function searchByContent($value)
+    {
+        return $this->createQueryBuilder('q')
+            ->andWhere('q.content LIKE :val')
+            ->setParameter('val', '%'.$value.'%')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findAllAskedQuestionByCreatedAtOrderPaginate()
+    {
+        $queryBuilder = $this->createQueryBuilder('q')
+            ->andWhere('q.content IS NOT NULL')
+            ->orderBy('q.createdAt', 'DESC');
+        return $queryBuilder;    
+    }
 //    /**
 //     * @return Question[] Returns an array of Question objects
 //     */

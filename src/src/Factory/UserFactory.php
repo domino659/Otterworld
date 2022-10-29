@@ -45,10 +45,9 @@ final class UserFactory extends ModelFactory
     {
         return [
             'username' => self::faker()->userName(),
-            'isAdmin' => self::faker()->boolean(),
             'votes' => self::faker()->numberBetween(-20, 50),
             'createdAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
-            'updatedAt' => self::faker()->dateTimeBetween('-50 days', '-1 second')
+            'updatedAt' => self::faker()->dateTimeBetween('-50 days', '-1 second'),
         ];
     }
 
@@ -60,33 +59,9 @@ final class UserFactory extends ModelFactory
             $user->setPassword($this->hasher->hashPassword($user, 'password'));
         });
     }
-
+    
     protected static function getClass(): string
     {
         return User::class;
     }
-
-    // /**
-    //  * @param Request $request
-    //  * @param EntityManagerInterface $em
-    //  * @return Response
-    //  * @Route("/user/sign-in", name="sign_in")
-    //  */
-
-    // public function new(Request $request,
-    //                     EntityManagerInterface $em,
-    //                     UserPasswordHasherInterface $hasher,
-    //                     UserAuthentificatorInterface $authentificator,
-    //                     LoginFormAuthentificator $loginFormAuthentificator): Response
-    // {
-    //     $user = new User();
-    //     $user->setUsername($request->request->get('username'))
-    //     ->setEmail($request->request->get('email'))
-    //     ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
-
-    //     $em->persist($user);
-    //     $em->flush();
-
-    //     return $authentificator->authenticateUser($user, $loginFormAuthetificator, $request);
-    // }
 }
