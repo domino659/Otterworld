@@ -1,29 +1,40 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/components/item.css') }}"
+{% endblock %}
+
 {% block body %}
-<div class="card">
+<div class="card box-badding">
   {# <label class="default-label">Id</label>
   <h4>{{ post.id }}</h4> #}
-  <label class="default-label">Title</label>
-  {% if is_granted('ROLE_USER') %}
-    <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
-  {% else %}
-    <h3>{{ post.title }}</h3>
-  {% endif %}
-  <label class="default-label">Autor</label>
-  {% if is_granted('ROLE_ADMIN') %}
-    <a class="minor_link" href="{{ path('app_user_show', { email: post.user.email }) }}"><p>{{ post.user.username }}</p></a>
-  {% else %}
-    <h3>{{ post.user.username }}</h3>
-  {% endif %}
-  <label class="default-label">Votes</label>
-  <span>{{ post.user.votes }}</span>
+  <div class="box-badding flex flex-row space-between">
+    <div>
+      <label class="default-label">Title</label>
+      {% if is_granted('ROLE_USER') %}
+        <a class="minor_link" href="{{ path('app_post_show', { id: post.id }) }}"><h3>{{ post.title }}</h3></a>
+      {% else %}
+        <h3>{{ post.title }}</h3>
+      {% endif %}
+      <label class="default-label">Autor</label>
+      {% if is_granted('ROLE_ADMIN') %}
+        <a class="minor_link" href="{{ path('app_user_show', { email: post.user.email }) }}"><p>{{ post.user.username }}</p></a>
+      {% else %}
+        <h3>{{ post.user.username }}</h3>
+      {% endif %}
+      <label class="default-label">Votes</label>
+      <span>{{ post.user.votes }}</span>
+    </div>
+    <img class="profil-img" src="{{ asset(post.imagePath) }}">
+  </div>
   <label class="default-label">Tags</label>
   <p>{{ post.slug }}</p>
   <label class="default-label">Content</label>
   <p>{{ post.content }}</p>
-  <label class="default-label">Price</label>
-  <p>{{ post.price }} €</p>
-  <img src="{{ asset(post.imagePath) }}" class="bd-placeholder-img rounded-circle" width="140" height="140">
-  <p>{{ post.createdAt|ago }}</p>
+  <div class="flex flex-row space-between">
+    <p><label class="default-label">Price</label> {{ post.price }} €</p>
+    <p>{{ post.createdAt|ago }}</p>
+  </div>
   {% if app.user.email | default('') == post.user.email %}
     <div>
       <a href="{{ path('app_post_update', {'id': post.id}) }}">

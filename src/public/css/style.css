@@ -32,9 +32,26 @@ a {
   margin-bottom: 20px;
 }
 
+.box-badding {
+  margin: 20px;
+}
+
 .flex {
   display: flex;
 }
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
 
 .default-container {
   width: 70%;
