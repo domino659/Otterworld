@@ -1,16 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/components/item.css') }}"
+{% endblock %}
+
 {% block body %}
 <div class="card">
   {# <label class="default-label">Id</label>
   <h4>{{ question.id }}</h4> #}
   {# <label class="default-label">Post</label>
   <a class="minor_link" href="{{ path('app_post_show', { id: question.post.id }) }}"><p>{{ question.post.title }}</p></a> #}
-  <label class="default-label">Autor</label>
-  <p>{{ question.user.username }}</p>
   <label class="default-label">Content</label>
   <p>{{ question.content }}</p>
-  <p>{{ question.createdAt|ago }}</p>
+  <div class="flex flex-row space-between">
+    <p><label class="default-label">Autor</label> {{ question.user.username }}</p>
+    <p class="ago">{{ question.createdAt|ago }}</p>
+  </div>
   {% if app.user.email == question.user.email %}
-    <div>
+    <div class="flex">
       <a href="{{ path('app_question_update', {'id': question.id}) }}">
         <button type="button" class="btn btn-light">Update</button>
       </a>
