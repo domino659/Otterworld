@@ -28,14 +28,10 @@ sudo chown -R $USER ./
 Pensez ensuite à aller exécuter toutes vos commandes depuis l'intérieur du container.  
 (Demandez à Composer de NE PAS créer une config Docker pour la database)
 
-Enfin, modifiez la config DB dans le fichier .env de Symfony :
-````shell
-DATABASE_URL=mysql://root:flamingo@db:3306/symfony_db?serverVersion=mariadb-10.7.1
-````
-
 ### Générer les données :
 Toujours depuis l \'intérieur du container:
 ````shell
+php bin/console doctrine:migrations:migrate
 symfony console doctrine:fixtures:load
 ````
 
