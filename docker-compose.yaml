@@ -5,7 +5,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-        container_name: projet_symfony_docker
+        container_name: projet_symfony_otterworld
         restart: on-failure
         ports:
             - "1234:80"
