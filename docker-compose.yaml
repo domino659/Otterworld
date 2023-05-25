@@ -16,7 +16,6 @@ services:
             - projet-acpSymfony
             - nginx-proxy-manager_default
 
-
     db:
         image: mariadb:10.8.2
         container_name: projet_mariadb_docker
